@@ -5,12 +5,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hackathon.quki.navigation.bottom_nav_bar.BottomNavigation
 import com.hackathon.quki.presentation.components.login.LoginScreen
-import com.hackathon.quki.presentation.components.main.MainScreen
 import com.hackathon.quki.presentation.viewmodel.LoginViewModel
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun MainNavigationGraph(navController: NavHostController) {
 
     NavHost(
         navController = navController,
@@ -25,18 +25,15 @@ fun NavigationGraph(navController: NavHostController) {
             LoginScreen(
                 loginState = loginState,
                 onNavigateMain = {
-                    navController.navigate(Screen.Main.route!!) {
+                    navController.navigate(Screen.Home.route!!) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
             )
         }
 
-        composable(route = Screen.Main.route!!) {
-            MainScreen(
-                text = "",
-                onTextChanged = {}
-            )
+        composable(route = Screen.Home.route!!) {
+            BottomNavigation()
         }
     }
 }

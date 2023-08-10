@@ -5,7 +5,7 @@ import com.hackathon.quki.navigation.Screen
 object Constants {
 
     val bottomNavItems = listOf(
-        Screen.Board,
+        Screen.Home,
         Screen.Profile
     )
 }
