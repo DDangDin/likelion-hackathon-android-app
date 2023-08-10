@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Quki</string>
+
+<!-- 이름 형식: (스크린/뷰)_(위젯)_(내용) -->
+    <string name="login_screen_text_title">가장 빠른 키오스크 주문</string>
+    <string name="login_screen_text_bottom_title">내가 만든 쿠키</string>
+
+    <string name="login_btn_title_kakao">카카오톡으로 로그인</string>
+    <string name="login_btn_title_google">구글로 로그인</string>
 </resources>
