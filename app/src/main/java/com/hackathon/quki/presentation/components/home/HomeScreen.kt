@@ -1,5 +1,6 @@
-package com.hackathon.quki.presentation.components.main
+package com.hackathon.quki.presentation.components.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,25 +11,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.hackathon.quki.R
+import com.hackathon.quki.ui.theme.QukiColorBackground
 
 @Composable
-fun MainScreen(
-    text: String,
-    onTextChanged: (String) -> Unit
+fun HomeScreen(
+    searchText: String,
+    onSearchTextChanged: (String) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().background(QukiColorBackground)) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            MainTopBar(
+            HomeTopBar(
                 modifier = Modifier.fillMaxWidth(),
-                logoIcon = R.drawable.ic_launcher_background,
-                optionIcon = R.drawable.ic_launcher_background,
-                optionIcon2 = R.drawable.ic_launcher_background,
-                text = text,
-                onTextChanged = { onTextChanged(it) }
+                logoIcon = R.drawable.ic_logo,
+                optionIcon = R.drawable.ic_help,
+                optionIcon2 = R.drawable.ic_setting,
+                searchText = searchText,
+                onSearchTextChanged = { onSearchTextChanged(it) }
             )
         }
     }
@@ -37,8 +39,8 @@ fun MainScreen(
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(
-        text = "",
-        onTextChanged = {}
+    HomeScreen(
+        searchText = "",
+        onSearchTextChanged = {}
     )
 }

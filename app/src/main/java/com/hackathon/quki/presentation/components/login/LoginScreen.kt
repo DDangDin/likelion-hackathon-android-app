@@ -73,9 +73,8 @@ fun LoginScreen(
             Image(
                 modifier = Modifier
                     .width(298.dp)
-                    .height(218.dp)
-                    .border(1.dp, Color.Black, RectangleShape),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    .height(218.dp),
+                painter = painterResource(id = R.drawable.ic_logo),
                 contentDescription = "logo"
             )
             Column(

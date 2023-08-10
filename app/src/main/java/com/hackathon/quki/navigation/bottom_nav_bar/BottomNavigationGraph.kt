@@ -7,11 +7,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hackathon.quki.navigation.Screen
+import com.hackathon.quki.presentation.components.home.HomeScreen
+import com.hackathon.quki.presentation.viewmodel.HomeViewModel
 import com.hackathon.quki.ui.theme.QukiColorBackground
 
 @Composable
@@ -28,11 +30,13 @@ fun BottomNavigationGraph(
 
         // Nav Items (start)
         composable(route = Screen.Home.route) {
-           Box(modifier = Modifier
-               .fillMaxSize()
-               .background(QukiColorBackground)) {
-               Text(modifier = Modifier.align(Alignment.Center), text = "home screen")
-           }
+
+            val homeViewModel = viewModel<HomeViewModel>()
+
+           HomeScreen(
+               searchText = homeViewModel.searchText.value,
+               onSearchTextChanged = homeViewModel::onSearchTextChanged
+           )
         }
 
         composable(route = Screen.Profile.route!!) {

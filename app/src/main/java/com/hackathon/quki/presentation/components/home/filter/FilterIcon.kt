@@ -1,4 +1,4 @@
-package com.hackathon.quki.presentation.components.main.filter
+package com.hackathon.quki.presentation.components.home.filter
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

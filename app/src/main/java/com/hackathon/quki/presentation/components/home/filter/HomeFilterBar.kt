@@ -1,4 +1,4 @@
-package com.hackathon.quki.presentation.components.main.filter
+package com.hackathon.quki.presentation.components.home.filter
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MainFilterBar(
+fun HomeFilterBar(
     modifier: Modifier = Modifier,
 ) {
 
@@ -34,5 +34,5 @@ fun MainFilterBar(
 @Preview(showBackground = true)
 @Composable
 fun MainFilterBarPreview() {
-    MainFilterBar(Modifier.fillMaxWidth())
+    HomeFilterBar(Modifier.fillMaxWidth())
 }

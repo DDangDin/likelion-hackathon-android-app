@@ -1,8 +1,10 @@
-package com.hackathon.quki.presentation.components.main
+package com.hackathon.quki.presentation.components.home
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.onFocusedBoundsChanged
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -19,13 +22,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -37,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hackathon.quki.R
+import com.hackathon.quki.presentation.components.home.filter.CustomTextField
 import com.hackathon.quki.ui.theme.QukiColorBlack
 import com.hackathon.quki.ui.theme.QukiColorGray_1
 import com.hackathon.quki.ui.theme.QukiColorGray_3
@@ -45,14 +56,22 @@ import com.hackathon.quki.ui.theme.QukiColorShadow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopBar(
+fun HomeTopBar(
     modifier: Modifier = Modifier,
     @DrawableRes logoIcon: Int,
     @DrawableRes optionIcon: Int,
     @DrawableRes optionIcon2: Int,
-    text: String,
-    onTextChanged: (String) -> Unit
+    searchText: String,
+    onSearchTextChanged: (String) -> Unit
 ) {
+
+//    val focusRequester = rememberSaveable() {
+//        FocusRequester()
+//    }
+
+    var isSearchBarFocused by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     Box(
         modifier = modifier
@@ -86,13 +105,13 @@ fun MainTopBar(
                         modifier = Modifier.size(25.dp),
                         painter = painterResource(id = logoIcon),
                         contentDescription = "logo icon",
-                        contentScale = ContentScale.None
+                        contentScale = ContentScale.Crop
                     )
                     Text(
                         text = stringResource(id = R.string.app_name),
                         fontSize = 20.sp,
                         fontWeight = FontWeight(700),
-                        color = QukiColorMain
+                        color = QukiColorBlack
                     )
                 }
                 Row(
@@ -115,7 +134,7 @@ fun MainTopBar(
                     }
                     IconButton(
                         modifier = Modifier.size(20.dp),
-                        onClick = { /*TODO*/ }
+                        onClick = { }
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
@@ -127,28 +146,47 @@ fun MainTopBar(
                 }
             }
 
-            OutlinedTextField(
+            CustomTextField(
                 modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
                     .fillMaxWidth()
-                    .height(30.dp),
-                value = text,
-                onValueChange = { onTextChanged(it) },
+                    .height(40.dp)
+                    .background(QukiColorGray_1)
+                    .border(
+                        1.5.dp,
+                        if (isSearchBarFocused) {
+                            QukiColorMain
+                        } else {
+                            Color.Transparent
+                        },
+                        RoundedCornerShape(10.dp)
+                    )
+                    .onFocusChanged {
+                        isSearchBarFocused = it.isFocused
+                    },
+                text = searchText,
+                onTextChanged = { onSearchTextChanged(it) },
+                textColor = QukiColorGray_3,
+                fontSize = 15.sp,
+                placeholderText = stringResource(id = R.string.home_tf_placeholder_text),
                 leadingIcon = {
                     Icon(
+                        modifier = Modifier.padding(start = 11.dp),
                         imageVector = Icons.Default.Search,
                         contentDescription = "tf_search_icon",
                         tint = QukiColorGray_3
                     )
-                },
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    cursorColor = QukiColorGray_3,
-                    textColor = QukiColorBlack,
-                    containerColor = QukiColorGray_1,
-                    focusedBorderColor = QukiColorGray_1,
-                    unfocusedBorderColor = QukiColorGray_1,
-                )
+                }
             )
+
+//                    colors = TextFieldDefaults.outlinedTextFieldColors(
+//                        cursorColor = QukiColorGray_3,
+//                        textColor = QukiColorBlack,
+//                        containerColor = QukiColorGray_1,
+//                        focusedBorderColor = QukiColorMain,
+//                        unfocusedBorderColor = QukiColorGray_1,
+//                    )
+
         }
     }
 }
@@ -156,11 +194,11 @@ fun MainTopBar(
 @Preview
 @Composable
 fun MainTopBarPreview() {
-    MainTopBar(
-        logoIcon = R.drawable.ic_launcher_background,
-        optionIcon = R.drawable.ic_launcher_background,
-        optionIcon2 = R.drawable.ic_launcher_background,
-        text = "",
-        onTextChanged = {}
+    HomeTopBar(
+        logoIcon = R.drawable.ic_logo,
+        optionIcon = R.drawable.ic_help,
+        optionIcon2 = R.drawable.ic_setting,
+        searchText = "",
+        onSearchTextChanged = {}
     )
 }
