@@ -22,36 +22,32 @@ class HomeViewModel @Inject constructor(
         searchText.value = value
     }
 
-//    init {
-//        dbDeleteAllTest()
-//        dbInsertTest()
+
+//    // TestCode (start)
+//    fun dbInsertTest() {
+//        viewModelScope.launch {
+//
+//            val testList = arrayListOf<CategoryEntity>()
+//
+//            for (i in 1..10) {
+//                testList.add(
+//                    CategoryEntity(
+//                        code = "category_code_$i",
+//                        name = "cate#$i"
+//                    )
+//                )
+//            }
+//
+//            testList.forEach {
+//                categoryRepository.insertCategory(it)
+//            }
+//        }
 //    }
-
-    // TestCode (start)
-    fun dbInsertTest() {
-        viewModelScope.launch {
-
-            val testList = arrayListOf<CategoryEntity>()
-
-            for (i in 1..10) {
-                testList.add(
-                    CategoryEntity(
-                        code = "category_code_$i",
-                        name = "cate#$i"
-                    )
-                )
-            }
-
-            testList.forEach {
-                categoryRepository.insertCategory(it)
-            }
-        }
-    }
-
-    fun dbDeleteAllTest() {
-        viewModelScope.launch {
-            categoryRepository.deleteAll()
-        }
-    }
-    // TestCode (end)
+//
+//    fun dbDeleteAllTest() {
+//        viewModelScope.launch {
+//            categoryRepository.deleteAll()
+//        }
+//    }
+//    // TestCode (end)
 }

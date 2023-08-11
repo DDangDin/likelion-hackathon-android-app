@@ -1,7 +1,7 @@
 package com.hackathon.quki.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,8 +19,8 @@ fun MainNavigationGraph(navController: NavHostController) {
 
         composable(route = Screen.Login.route) {
 
-            val onBoardViewModel = viewModel<LoginViewModel>()
-            val loginState = onBoardViewModel.loginState.value
+            val loginViewModel: LoginViewModel = hiltViewModel()
+            val loginState = loginViewModel.loginState.value
 
             LoginScreen(
                 loginState = loginState,

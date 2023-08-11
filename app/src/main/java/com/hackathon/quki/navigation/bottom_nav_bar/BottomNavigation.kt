@@ -112,17 +112,17 @@ fun BottomNavigation() {
                         .size(65.dp),
                     shape = CircleShape,
                     onClick = {
-                    Screen.QrScanScreen.route?.let {
-                        navController.navigate(it) {
-                            navController.navigate(it) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    }
+//                    Screen.QrScanScreen.route?.let {
+//                        navController.navigate(it) {
+//                            navController.navigate(it) {
+//                                popUpTo(navController.graph.findStartDestination().id) {
+//                                    saveState = true
+//                                }
+//                                launchSingleTop = true
+//                                restoreState = true
+//                            }
+//                        }
+//                    }
                     },
                     backgroundColor = QukiColorMain,
                     contentColor = Color.White

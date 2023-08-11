@@ -53,7 +53,7 @@ fun CategoryContent(
 
         LazyVerticalGrid(
             modifier = Modifier.fillMaxWidth(),
-            columns = GridCells.Fixed(4),
+            columns = GridCells.Fixed(3),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.Start),
             contentPadding = PaddingValues(10.dp)
@@ -80,17 +80,20 @@ fun CategoryContentPreview() {
         CategoryEntity(
             name = "카페",
             desc = "",
-            code = ""
+            code = "",
+            isFilterChecked = true
         ),
         CategoryEntity(
             name = "패스트푸드",
             desc = "",
-            code = ""
+            code = "",
+            isFilterChecked = true
         ),
         CategoryEntity(
             name = "도시락",
             desc = "",
-            code = ""
+            code = "",
+            isFilterChecked = true
         ),
         CategoryEntity(
             name = "중식",
