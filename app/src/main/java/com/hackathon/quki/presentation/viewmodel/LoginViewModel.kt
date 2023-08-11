@@ -35,7 +35,7 @@ class LoginViewModel @Inject constructor(
     fun checkLogin() {
         viewModelScope.launch {
             _loginState.value = loginState.value.copy(loading = true)
-            delay(3000L)
+            delay(1500L)
             _loginState.value = loginState.value.copy(login = true, loading = false)
         }
     }

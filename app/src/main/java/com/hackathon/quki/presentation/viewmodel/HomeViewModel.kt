@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
+import com.hackathon.quki.data.source.remote.QrCode
 import com.hackathon.quki.domain.repository.CategoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
@@ -17,6 +18,25 @@ class HomeViewModel @Inject constructor(
 
     var searchText = mutableStateOf("")
         private set
+
+    val testQrCodeList = arrayListOf<QrCode>()
+
+    init {
+        for (i in 1..10) {
+            testQrCodeList.add(
+                QrCode(
+                    userId = 1,
+                    title = "내 최애 메뉴",
+                    storeId = 10,
+                    price = 1000,
+                    image = "https://images.dog.ceo/breeds/hound-plott/hhh_plott002.jpg",
+                    isFavorite = false,
+                    content = "메가리카노",
+                    id = 7
+                )
+            )
+        }
+    }
 
     fun onSearchTextChanged(value: String) {
         searchText.value = value
