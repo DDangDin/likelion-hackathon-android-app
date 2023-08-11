@@ -65,6 +65,7 @@ fun HomeTopBar(
     onSearchTextChanged: (String) -> Unit
 ) {
 
+    // 나중에 focus 처리 하기
 //    val focusRequester = rememberSaveable() {
 //        FocusRequester()
 //    }

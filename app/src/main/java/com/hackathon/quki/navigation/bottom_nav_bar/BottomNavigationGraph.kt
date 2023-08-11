@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,7 +32,7 @@ fun BottomNavigationGraph(
         // Nav Items (start)
         composable(route = Screen.Home.route) {
 
-            val homeViewModel = viewModel<HomeViewModel>()
+            val homeViewModel: HomeViewModel = hiltViewModel()
 
            HomeScreen(
                searchText = homeViewModel.searchText.value,
