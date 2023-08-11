@@ -6,7 +6,7 @@ import com.hackathon.quki.data.source.local.entity.CategoryEntity
 
 @Database(
     entities = [CategoryEntity::class],
-    version = 1
+    version = 2
 )
 abstract class CategoryDatabase: RoomDatabase() {
 

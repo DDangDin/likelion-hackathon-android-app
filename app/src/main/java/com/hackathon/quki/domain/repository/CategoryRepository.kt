@@ -12,6 +12,8 @@ interface CategoryRepository {
 
     suspend fun insertCategory(categoryEntity: CategoryEntity)
 
+    suspend fun filterCheck(categoryEntity: CategoryEntity)
+
     suspend fun deleteCategory(categoryEntity: CategoryEntity)
 
     suspend fun deleteAll()

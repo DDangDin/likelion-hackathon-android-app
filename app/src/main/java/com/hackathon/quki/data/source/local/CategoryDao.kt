@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 
 @Dao
@@ -15,6 +16,9 @@ interface CategoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(categoryEntity: CategoryEntity)
+
+    @Update
+    suspend fun filterCheck(categoryEntity: CategoryEntity)
 
     @Delete
     suspend fun deleteCategory(categoryEntity: CategoryEntity)

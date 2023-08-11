@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.domain.repository.CategoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,10 +22,12 @@ class HomeViewModel @Inject constructor(
         searchText.value = value
     }
 
-    init {
-        dbInsertTest()
-    }
+//    init {
+//        dbDeleteAllTest()
+//        dbInsertTest()
+//    }
 
+    // TestCode (start)
     fun dbInsertTest() {
         viewModelScope.launch {
 
@@ -33,8 +36,8 @@ class HomeViewModel @Inject constructor(
             for (i in 1..10) {
                 testList.add(
                     CategoryEntity(
-                        code = "code#$i",
-                        name = "name#$i"
+                        code = "category_code_$i",
+                        name = "cate#$i"
                     )
                 )
             }
@@ -50,4 +53,5 @@ class HomeViewModel @Inject constructor(
             categoryRepository.deleteAll()
         }
     }
+    // TestCode (end)
 }

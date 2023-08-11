@@ -16,6 +16,10 @@ class CategoryRepositoryImpl(
         dao.insertCategory(categoryEntity)
     }
 
+    override suspend fun filterCheck(categoryEntity: CategoryEntity) {
+        dao.filterCheck(categoryEntity)
+    }
+
     override suspend fun deleteCategory(categoryEntity: CategoryEntity) {
         dao.deleteCategory(categoryEntity)
     }

@@ -1,5 +1,5 @@
 package com.hackathon.quki.presentation.state
 
-sealed class HomeUiState {
+sealed class HomeUiEvent {
 
 }
