@@ -7,10 +7,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hackathon.quki.navigation.bottom_nav_bar.BottomNavigation
 import com.hackathon.quki.presentation.components.login.LoginScreen
+import com.hackathon.quki.presentation.viewmodel.HomeViewModel
 import com.hackathon.quki.presentation.viewmodel.LoginViewModel
 
 @Composable
-fun MainNavigationGraph(navController: NavHostController) {
+fun MainNavigationGraph(
+    navController: NavHostController,
+    onScanQrClick: () -> Unit,
+    homeViewModel: HomeViewModel
+) {
 
     NavHost(
         navController = navController,
@@ -33,7 +38,10 @@ fun MainNavigationGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.Home.route!!) {
-            BottomNavigation()
+            BottomNavigation(
+                onScanQrClick = onScanQrClick,
+                homeViewModel = homeViewModel
+            )
         }
     }
 }

@@ -5,15 +5,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.navigation.Screen
 import com.hackathon.quki.presentation.components.home.HomeScreen
+import com.hackathon.quki.presentation.components.qr_card.QrCardFullScreen
 import com.hackathon.quki.presentation.state.CategoryState
 import com.hackathon.quki.presentation.state.CategoryUiEvent
 import com.hackathon.quki.presentation.viewmodel.HomeViewModel
@@ -23,6 +24,7 @@ import com.hackathon.quki.ui.theme.QukiColorBackground
 fun BottomNavigationGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    homeViewModel: HomeViewModel,
     categoryState: CategoryState,
     uiEventForCategory: (CategoryUiEvent, CategoryEntity) -> Unit,
     onOpenFilter: () -> Unit
@@ -37,7 +39,7 @@ fun BottomNavigationGraph(
         // Nav Items (start)
         composable(route = Screen.Home.route) {
 
-            val homeViewModel: HomeViewModel = hiltViewModel()
+            val qrCardsState = homeViewModel.qrCardsState.collectAsState()
 
             HomeScreen(
                 searchText = homeViewModel.searchText.value,
@@ -50,8 +52,9 @@ fun BottomNavigationGraph(
                 onFilterDelete = { event, item ->
                     uiEventForCategory(event, item)
                 },
-                qrCodeList = homeViewModel.testQrCodeList,
-                onQrCardClick = {}
+                qrCodeList = qrCardsState.value.qrCards.reversed(),
+                onEvent = homeViewModel::uiEvent,
+                onOpenQrCard = { navController.navigate(Screen.QrCardFull.route!!) }
             )
         }
 
@@ -63,6 +66,19 @@ fun BottomNavigationGraph(
             ) {
                 Text(modifier = Modifier.align(Alignment.Center), text = "profile screen")
             }
+        }
+
+        composable(route = Screen.QrCardFull.route!!) {
+
+            val qrCardState = homeViewModel.qrCardState.collectAsState()
+
+            QrCardFullScreen(
+                qrCode = qrCardState.value.qrCard,
+                onClose = { navController.popBackStack() },
+                onFavoriteClick = {  },
+                onShare = {  },
+                onDownload = {  }
+            )
         }
 
 //        composable(route = Screen.Filter.route!!) {

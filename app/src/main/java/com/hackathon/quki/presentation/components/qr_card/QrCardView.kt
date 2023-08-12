@@ -2,7 +2,6 @@ package com.hackathon.quki.presentation.components.qr_card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -29,12 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.hackathon.quki.R
+import com.hackathon.quki.core.common.Constants.megaCoffeeMenu
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
+import com.hackathon.quki.data.source.remote.Content
 import com.hackathon.quki.data.source.remote.QrCode
 import com.hackathon.quki.ui.theme.QukiColorGray_2
 import com.hackathon.quki.ui.theme.QukiColorGray_3
 import com.hackathon.quki.ui.theme.QukiColorMain
-import com.hackathon.quki.ui.theme.QukiColorShadow
 
 @Composable
 fun QrCardView(
@@ -90,13 +89,13 @@ fun QrCardView(
                         color = QukiColorMain
                     )
                     Text(
-                        text = qrCode.content,
+                        text = megaCoffeeMenu[qrCode.content.id]!!,
                         fontSize = 14.sp,
                         fontWeight = FontWeight(400),
                         color = QukiColorGray_2
                     )
                     Text(
-                        text = qrCode.content,
+                        text = megaCoffeeMenu[qrCode.content.id]!!,
                         fontSize = 12.sp,
                         fontWeight = FontWeight(400),
                         color = QukiColorGray_2
@@ -113,9 +112,9 @@ fun QrCardView(
                         onClick = onFavoriteClick
                     ),
                 painter = if (qrCode.isFavorite) {
-                    painterResource(id = R.drawable.ic_favorite_y)
+                    painterResource(id = R.drawable.img_favorite_y)
                 } else {
-                    painterResource(id = R.drawable.ic_favorite_n)
+                    painterResource(id = R.drawable.img_favorite_n)
                 },
                 contentDescription = "favorite_image"
             )
@@ -128,7 +127,13 @@ fun QrCardView(
 fun QrCardViewPreview() {
     QrCardView(qrCode = QrCode(
         id = 10,
-        content = "메가리카노",
+        content = Content(
+            id = 3,
+            url = "",
+            type = "커피",
+            count = 1,
+            price = 1000
+        ),
         isFavorite = false,
         image = "https://images.dog.ceo/breeds/hound-plott/hhh_plott002.jpg",
         price = 100,

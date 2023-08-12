@@ -1,6 +1,5 @@
 package com.hackathon.quki.navigation.bottom_nav_bar
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +26,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
@@ -47,7 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -56,6 +53,7 @@ import com.hackathon.quki.core.utils.CustomRippleEffect
 import com.hackathon.quki.navigation.Screen
 import com.hackathon.quki.presentation.components.home.filter_screen.FilterScreen
 import com.hackathon.quki.presentation.viewmodel.CategoryViewModel
+import com.hackathon.quki.presentation.viewmodel.HomeViewModel
 import com.hackathon.quki.ui.theme.QukiColorGray_2
 import com.hackathon.quki.ui.theme.QukiColorMain
 import com.hackathon.quki.ui.theme.QukiColorShadow
@@ -63,7 +61,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomNavigation() {
+fun BottomNavigation(
+    onScanQrClick: () -> Unit,
+    homeViewModel: HomeViewModel
+) {
 
     val scaffoldState = rememberScaffoldState()
     val navController = rememberNavController()
@@ -112,6 +113,7 @@ fun BottomNavigation() {
                         .size(65.dp),
                     shape = CircleShape,
                     onClick = {
+                              onScanQrClick()
 //                    Screen.QrScanScreen.route?.let {
 //                        navController.navigate(it) {
 //                            navController.navigate(it) {
@@ -155,6 +157,7 @@ fun BottomNavigation() {
                 modifier = Modifier.padding(it),
                 navController = navController,
                 categoryState = categoryState.value,
+                homeViewModel = homeViewModel,
                 uiEventForCategory = { event, item ->
                     categoryViewModel.uiEventForCategory(event, item)
                 },
@@ -243,5 +246,7 @@ fun MyBottomBar(
 @Preview
 @Composable
 fun BottomBarWithFab2Preview() {
-    BottomNavigation()
+    BottomNavigation(){
+
+    }
 }

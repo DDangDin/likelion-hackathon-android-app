@@ -1,14 +1,19 @@
 package com.hackathon.quki.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.hackathon.quki.data.source.local.entity.CategoryEntity
+import com.hackathon.quki.data.source.remote.Content
 import com.hackathon.quki.data.source.remote.QrCode
 import com.hackathon.quki.domain.repository.CategoryRepository
+import com.hackathon.quki.presentation.state.HomeQrUiEvent
+import com.hackathon.quki.presentation.state.QrCardState
+import com.hackathon.quki.presentation.state.QrCardsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,9 +24,34 @@ class HomeViewModel @Inject constructor(
     var searchText = mutableStateOf("")
         private set
 
-    val testQrCodeList = arrayListOf<QrCode>()
+    private val _qrCardsState = MutableStateFlow(QrCardsState())
+    val qrCardsState: StateFlow<QrCardsState> = _qrCardsState.asStateFlow()
+
+    private val _qrCardState = MutableStateFlow(QrCardState())
+    val qrCardState: StateFlow<QrCardState> = _qrCardState.asStateFlow()
 
     init {
+        getQrCards()
+    }
+
+    fun onSearchTextChanged(value: String) {
+        searchText.value = value
+    }
+
+    fun uiEvent(homeUiEvent: HomeQrUiEvent) {
+        when(homeUiEvent) {
+            is HomeQrUiEvent.OpenQrCard -> {
+                _qrCardState.update { it.copy(loading = true) }
+                _qrCardState.update { it.copy(loading = false, qrCard = homeUiEvent.qrCode) }
+            }
+        }
+    }
+
+    fun getQrCards() {
+        Log.d("HomeViewModel_Log", "HomeViewModel-getQrCards Trigger")
+        _qrCardsState.update { it.copy(loading = true) }
+
+        val testQrCodeList = arrayListOf<QrCode>()
         for (i in 1..10) {
             testQrCodeList.add(
                 QrCode(
@@ -31,17 +61,20 @@ class HomeViewModel @Inject constructor(
                     price = 1000,
                     image = "https://images.dog.ceo/breeds/hound-plott/hhh_plott002.jpg",
                     isFavorite = false,
-                    content = "메가리카노",
+                    content = Content(
+                        id = if (i == 10) 10 else 3,
+                        price = 1000,
+                        count = 1,
+                        type = "커피",
+                        url = "" // QrImage
+                    ),
                     id = 7
                 )
             )
         }
-    }
 
-    fun onSearchTextChanged(value: String) {
-        searchText.value = value
+        _qrCardsState.update { it.copy(loading = false, qrCards = testQrCodeList) }
     }
-
 
 //    // TestCode (start)
 //    fun dbInsertTest() {

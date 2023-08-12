@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera.any"/>
 
     <application
         android:name=".QukiApplication"
@@ -16,6 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Quki"
         tools:targetApi="31">
+        <activity
+            android:name=".ScanQrActivity"
+            android:exported="false"
+            android:label="@string/title_activity_scan_qr"
+            android:theme="@style/Theme.Quki" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

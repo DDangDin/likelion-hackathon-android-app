@@ -19,5 +19,5 @@ val QukiColorGray_2 = Color(0xFFC9C9C9)
 val QukiColorGray_3 = Color(0xFF626262)
 val QukiColorBlack = Color(0xFF333333)
 
-val QukiColorShadow = Color(0x26000000)
+val QukiColorShadow = Color(0x80000000)
 

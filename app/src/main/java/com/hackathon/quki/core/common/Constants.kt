@@ -8,4 +8,10 @@ object Constants {
         Screen.Home,
         Screen.Profile
     )
+
+    val megaCoffeeMenu = hashMapOf<Int, String>(
+        3 to "메가리카노",
+        10 to "테스트 커피"
+    )
+
 }

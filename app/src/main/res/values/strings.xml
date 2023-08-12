@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Quki</string>
 
-<!-- 이름 형식: (스크린/뷰)_(위젯)_(내용) -->
+    <!-- 이름 형식: (스크린/뷰)_(위젯)_(내용) -->
     <string name="login_screen_text_title">가장 빠른 키오스크 주문</string>
     <string name="login_screen_text_bottom_title">내가 만든 쿠키</string>
 
@@ -19,5 +19,15 @@
     <string name="filter_sub_content_align_text_2">최신 순</string>
     <string name="filter_sub_content_view_text_1">즐겨찾기만 보기</string>
     <string name="filter_sub_content_view_text_2">전체 보기</string>
+    <string name="title_activity_scan_qr">ScanQrActivity</string>
 
+    <string name="permission_denied_message">카메라 권한을 활성화 해 주세요</string>
+
+    <string name="qr_scan_title">코드스캔</string>
+
+    <string name="qr_card_full_screen_title">주문 코드</string>
+
+    <string name="qr_card_full_screen_notice">키오스크에 주문 코드를 찍어주세요</string>
+    <string name="qr_card_full_screen_bottom_bar_share">공유</string>
+    <string name="qr_card_full_screen_bottom_bar_download">저장</string>
 </resources>
