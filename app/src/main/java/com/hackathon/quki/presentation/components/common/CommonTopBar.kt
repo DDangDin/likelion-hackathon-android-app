@@ -28,7 +28,7 @@ import com.hackathon.quki.ui.theme.QukiColorGray_3
 fun CommonTopBar(
     modifier: Modifier = Modifier,
     onClose: () -> Unit,
-    title: String
+    title: String,
 ) {
 
     Row(

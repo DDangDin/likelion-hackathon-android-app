@@ -126,12 +126,16 @@ fun HomeScreen(
                                     spotColor = QukiColorShadow,
                                     ambientColor = QukiColorShadow
                                 )
-                                .clickable { onQrCardClick(qrCode) },
+                                .clickableWithoutRipple(
+                                    interactionSource = MutableInteractionSource(),
+                                    onClick = { onQrCardClick(qrCode) }
+                                ),
 //                                .clickableWithoutRipple(
 //                                    interactionSource = MutableInteractionSource(),
 //                                    onClick = { onQrCardClick(qrCode) }
 //                                ),
-                            qrCode = qrCode
+                            qrCode = qrCode,
+                            onFavoriteClick = {}
                         )
                     }
                 }

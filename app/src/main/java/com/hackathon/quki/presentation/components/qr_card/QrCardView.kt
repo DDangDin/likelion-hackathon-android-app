@@ -2,6 +2,8 @@ package com.hackathon.quki.presentation.components.qr_card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.hackathon.quki.R
+import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
 import com.hackathon.quki.data.source.remote.QrCode
 import com.hackathon.quki.ui.theme.QukiColorGray_2
 import com.hackathon.quki.ui.theme.QukiColorGray_3
@@ -36,7 +39,8 @@ import com.hackathon.quki.ui.theme.QukiColorShadow
 @Composable
 fun QrCardView(
     modifier: Modifier = Modifier,
-    qrCode: QrCode
+    qrCode: QrCode,
+    onFavoriteClick: () -> Unit
 ) {
 
     Box(
@@ -102,7 +106,12 @@ fun QrCardView(
             Image(
                 modifier = Modifier
                     .size(23.dp)
-                    .align(Alignment.Top),
+                    .align(Alignment.Top)
+                    .clip(RoundedCornerShape(50))
+                    .clickableWithoutRipple(
+                        interactionSource = MutableInteractionSource(),
+                        onClick = onFavoriteClick
+                    ),
                 painter = if (qrCode.isFavorite) {
                     painterResource(id = R.drawable.ic_favorite_y)
                 } else {
@@ -126,5 +135,7 @@ fun QrCardViewPreview() {
         storeId = 10,
         title = "내 최애 메뉴",
         userId = 1
-    ))
+    ),
+        onFavoriteClick = {}
+    )
 }
