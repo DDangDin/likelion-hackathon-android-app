@@ -1,5 +1,8 @@
 package com.hackathon.quki.navigation.bottom_nav_bar
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -76,6 +79,7 @@ fun BottomNavigation(
     val categoryViewModel: CategoryViewModel = hiltViewModel()
     val categoryState = categoryViewModel.categoryState.collectAsState()
 
+    val isQrCardOpen = homeViewModel.isQrCardOpen.collectAsState()
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -106,14 +110,27 @@ fun BottomNavigation(
         Scaffold(
             scaffoldState = scaffoldState,
             modifier = Modifier.fillMaxSize(),
-            bottomBar = { MyBottomBar(navController) },
+            bottomBar = {
+                AnimatedVisibility(
+                    visible = !isQrCardOpen.value,
+                    enter = slideInVertically(initialOffsetY = { it }),
+                    exit = slideOutVertically(targetOffsetY = { it })
+                ) {
+                    MyBottomBar(navController)
+                }
+            },
             floatingActionButton = {
-                FloatingActionButton(
-                    modifier = Modifier
-                        .size(65.dp),
-                    shape = CircleShape,
-                    onClick = {
-                              onScanQrClick()
+                AnimatedVisibility(
+                    visible = !isQrCardOpen.value,
+                    enter = slideInVertically(initialOffsetY = { it }),
+                    exit = slideOutVertically(targetOffsetY = { it })
+                ) {
+                    FloatingActionButton(
+                        modifier = Modifier
+                            .size(65.dp),
+                        shape = CircleShape,
+                        onClick = {
+                            onScanQrClick()
 //                    Screen.QrScanScreen.route?.let {
 //                        navController.navigate(it) {
 //                            navController.navigate(it) {
@@ -125,28 +142,29 @@ fun BottomNavigation(
 //                            }
 //                        }
 //                    }
-                    },
-                    backgroundColor = QukiColorMain,
-                    contentColor = Color.White
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(
-                            6.dp,
-                            alignment = Alignment.CenterVertically
-                        )
+                        },
+                        backgroundColor = QukiColorMain,
+                        contentColor = Color.White
                     ) {
-                        Icon(
-                            modifier = Modifier.size(25.dp),
-                            imageVector = ImageVector.vectorResource(Screen.QrScanScreen.icon!!),
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                        Text(
-                            text = Screen.QrScanScreen.title!!,
-                            color = Color.White,
-                            fontSize = 10.sp
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(
+                                6.dp,
+                                alignment = Alignment.CenterVertically
+                            )
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(25.dp),
+                                imageVector = ImageVector.vectorResource(Screen.QrScanScreen.icon!!),
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                            Text(
+                                text = Screen.QrScanScreen.title!!,
+                                color = Color.White,
+                                fontSize = 10.sp
+                            )
+                        }
                     }
                 }
             },
@@ -246,7 +264,7 @@ fun MyBottomBar(
 @Preview
 @Composable
 fun BottomBarWithFab2Preview() {
-    BottomNavigation(){
+    BottomNavigation() {
 
     }
 }

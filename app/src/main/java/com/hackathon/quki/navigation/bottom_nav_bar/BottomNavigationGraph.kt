@@ -54,7 +54,10 @@ fun BottomNavigationGraph(
                 },
                 qrCodeList = qrCardsState.value.qrCards.reversed(),
                 onEvent = homeViewModel::uiEvent,
-                onOpenQrCard = { navController.navigate(Screen.QrCardFull.route!!) }
+                onOpenQrCard = {
+                    homeViewModel.isQrCardOpen(true)
+                    navController.navigate(Screen.QrCardFull.route!!)
+                }
             )
         }
 
@@ -73,11 +76,15 @@ fun BottomNavigationGraph(
             val qrCardState = homeViewModel.qrCardState.collectAsState()
 
             QrCardFullScreen(
+                modifier = Modifier.fillMaxSize(),
                 qrCode = qrCardState.value.qrCard,
-                onClose = { navController.popBackStack() },
-                onFavoriteClick = {  },
-                onShare = {  },
-                onDownload = {  }
+                onClose = {
+                    homeViewModel.isQrCardOpen(false)
+                    navController.popBackStack()
+                },
+                onFavoriteClick = { },
+                onShare = { },
+                onDownload = { }
             )
         }
 

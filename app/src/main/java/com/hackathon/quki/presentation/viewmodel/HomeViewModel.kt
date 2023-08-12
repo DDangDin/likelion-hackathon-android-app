@@ -30,6 +30,9 @@ class HomeViewModel @Inject constructor(
     private val _qrCardState = MutableStateFlow(QrCardState())
     val qrCardState: StateFlow<QrCardState> = _qrCardState.asStateFlow()
 
+    private val _isQrCardOpen = MutableStateFlow(false)
+    val isQrCardOpen: StateFlow<Boolean> = _isQrCardOpen.asStateFlow()
+
     init {
         getQrCards()
     }
@@ -46,6 +49,8 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun isQrCardOpen(value: Boolean) = _isQrCardOpen.update { value }
 
     fun getQrCards() {
         Log.d("HomeViewModel_Log", "HomeViewModel-getQrCards Trigger")

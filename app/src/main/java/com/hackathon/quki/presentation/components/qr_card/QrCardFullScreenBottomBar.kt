@@ -39,7 +39,7 @@ fun QrCardFullScreenBottomBar(
         modifier = modifier
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         Text(
             text = stringResource(id = R.string.qr_card_full_screen_notice),
