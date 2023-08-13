@@ -2,6 +2,7 @@ package com.hackathon.quki.presentation.components.qr_card
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,18 +16,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hackathon.quki.R
 import com.hackathon.quki.data.source.remote.Content
-import com.hackathon.quki.data.source.remote.QrCode
+import com.hackathon.quki.data.source.remote.QrCodeForApp
+import com.hackathon.quki.data.source.remote.StoreId
 import com.hackathon.quki.presentation.components.common.CommonTopBar
 import com.hackathon.quki.ui.theme.QukiColorMain
 
 @Composable
 fun QrCardFullScreen(
     modifier: Modifier = Modifier,
-    qrCode: QrCode?,
+    qrCodeForApp: QrCodeForApp?,
     onClose: () -> Unit,
     onFavoriteClick: () -> Unit,
     onShare: () -> Unit,
-    onDownload: () -> Unit
+    onSave: () -> Unit,
+    wasHomeScreen: Boolean = true
 ) {
 
     Column(
@@ -41,7 +44,7 @@ fun QrCardFullScreen(
             onClose = onClose,
             title = stringResource(id = R.string.qr_card_full_screen_title)
         )
-        if (qrCode == null) {
+        if (qrCodeForApp == null) {
             CircularProgressIndicator(
                 modifier = Modifier.size(100.dp),
                 strokeWidth = 2.dp,
@@ -53,16 +56,20 @@ fun QrCardFullScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp),
                 likeCount = 0,
-                qrCode = qrCode,
+                qrCodeForApp = qrCodeForApp,
                 onFavoriteClick = onFavoriteClick,
             )
-            QrCardFullScreenBottomBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp, vertical = 30.dp),
-                onShare = onShare,
-                onDownload = onDownload
-            )
+            if (!wasHomeScreen) {
+                QrCardFullScreenBottomBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp, vertical = 30.dp),
+                    onShare = onShare,
+                    onDownload = onSave
+                )
+            } else {
+                Spacer(modifier = Modifier.size(150.dp))
+            }
         }
     }
 }
@@ -72,25 +79,27 @@ fun QrCardFullScreen(
 fun QrCardFullScreenPreview() {
     QrCardFullScreen(
         modifier = Modifier.fillMaxSize(),
-        qrCode = QrCode(
-            userId = 1,
+        qrCodeForApp = QrCodeForApp(
             title = "내 최애 메뉴",
-            storeId = 10,
+            storeId = StoreId(
+                store_id = 10,
+                storeName = "메가커피"
+            ),
             price = 1000,
-            image = "https://images.dog.ceo/breeds/hound-plott/hhh_plott002.jpg",
+            image = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
             isFavorite = false,
-            content = Content(
+            contentEntity = Content(
                 id = 3,
                 price = 1000,
                 count = 1,
                 type = "커피",
                 url = "" // QrImage
             ),
-            id = 7
+            content = "옵션1, 옵션2, ..."
         ),
         onClose = {},
         onFavoriteClick = {},
         onShare = {},
-        onDownload = {}
+        onSave = {}
     )
 }

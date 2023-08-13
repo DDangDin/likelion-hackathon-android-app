@@ -41,7 +41,8 @@ import com.hackathon.quki.R
 import com.hackathon.quki.core.common.Constants.megaCoffeeMenu
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
 import com.hackathon.quki.data.source.remote.Content
-import com.hackathon.quki.data.source.remote.QrCode
+import com.hackathon.quki.data.source.remote.QrCodeForApp
+import com.hackathon.quki.data.source.remote.StoreId
 import com.hackathon.quki.ui.theme.QukiColorBlack
 import com.hackathon.quki.ui.theme.QukiColorGray_3
 import com.hackathon.quki.ui.theme.QukiColorMain
@@ -51,7 +52,7 @@ import com.hackathon.quki.ui.theme.QukiColorShadow
 fun QrCardViewExpanded(
     modifier: Modifier = Modifier,
     likeCount: Int,
-    qrCode: QrCode,
+    qrCodeForApp: QrCodeForApp,
     onFavoriteClick: () -> Unit
 ) {
 
@@ -119,7 +120,7 @@ fun QrCardViewExpanded(
                                 interactionSource = MutableInteractionSource(),
                                 onClick = onFavoriteClick
                             ),
-                        painter = if (qrCode.isFavorite) {
+                        painter = if (qrCodeForApp.isFavorite) {
                             painterResource(R.drawable.img_favorite_y)
                         } else {
                             painterResource(R.drawable.img_favorite_n)
@@ -130,7 +131,7 @@ fun QrCardViewExpanded(
             }
             AsyncImage(
                 modifier = Modifier.size(280.dp),
-                model = qrCode.image,
+                model = qrCodeForApp.image,
                 contentDescription = "qrcode image",
                 contentScale = ContentScale.Crop,
             )
@@ -146,7 +147,7 @@ fun QrCardViewExpanded(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = qrCode.title,
+                        text = qrCodeForApp.title,
                         fontSize = 16.sp,
                         fontWeight = FontWeight(700),
                         color = QukiColorGray_3
@@ -161,7 +162,7 @@ fun QrCardViewExpanded(
                     )
                 }
                 Text(
-                    text = "가게 명",
+                    text = qrCodeForApp.storeId.storeName,
                     fontSize = 14.sp,
                     fontWeight = FontWeight(700),
                     color = QukiColorMain
@@ -175,13 +176,13 @@ fun QrCardViewExpanded(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = megaCoffeeMenu[qrCode.content.id]!!,
+                    text = megaCoffeeMenu[qrCodeForApp.contentEntity.id]!!,
                     fontSize = 18.sp,
                     fontWeight = FontWeight(700),
                     color = QukiColorGray_3
                 )
                 Text(
-                    text = "옵션1, 옵션2, 옵션3, ...",
+                    text = qrCodeForApp.content,
                     fontSize = 16.sp,
                     fontWeight = FontWeight(700),
                     color = QukiColorMain
@@ -191,7 +192,7 @@ fun QrCardViewExpanded(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 28.dp),
-                text = "${qrCode.price} 원",
+                text = "${qrCodeForApp.price} 원",
                 fontSize = 18.sp,
                 fontWeight = FontWeight(700),
                 color = QukiColorGray_3,
@@ -206,21 +207,23 @@ fun QrCardViewExpanded(
 fun QrCardViewExpandedPreview() {
     QrCardViewExpanded(
         modifier = Modifier.fillMaxSize(),
-        qrCode = QrCode(
-            userId = 1,
+        qrCodeForApp = QrCodeForApp(
             title = "내 최애 메뉴",
-            storeId = 10,
+            storeId = StoreId(
+                store_id = 10,
+                storeName = "메가커피"
+            ),
             price = 1000,
-            image = "https://images.dog.ceo/breeds/hound-plott/hhh_plott002.jpg",
+            image = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
             isFavorite = false,
-            content = Content(
+            contentEntity = Content(
                 id = 3,
                 price = 1000,
                 count = 1,
                 type = "커피",
                 url = "" // QrImage
             ),
-            id = 7
+            content = "옵션1, 옵션2, ..."
         ),
         onFavoriteClick = {},
         likeCount = 122

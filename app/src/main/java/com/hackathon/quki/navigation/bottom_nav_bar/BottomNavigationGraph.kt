@@ -1,5 +1,6 @@
 package com.hackathon.quki.navigation.bottom_nav_bar
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,8 +10,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.navigation.Screen
 import com.hackathon.quki.presentation.components.home.HomeScreen
@@ -56,7 +59,7 @@ fun BottomNavigationGraph(
                 onEvent = homeViewModel::uiEvent,
                 onOpenQrCard = {
                     homeViewModel.isQrCardOpen(true)
-                    navController.navigate(Screen.QrCardFull.route!!)
+                    navController.navigate("${Screen.QrCardFull.route!!}/${true}")
                 }
             )
         }
@@ -71,20 +74,38 @@ fun BottomNavigationGraph(
             }
         }
 
-        composable(route = Screen.QrCardFull.route!!) {
+        composable(
+            route = "${Screen.QrCardFull.route!!}/{wasHomeScreen}",
+            arguments = listOf(
+                navArgument("wasHomeScreen") {
+                    type = NavType.BoolType
+                    defaultValue = true
+                }
+            )
+        ) { backStackEntry ->
 
             val qrCardState = homeViewModel.qrCardState.collectAsState()
 
+            val wasHomeScreen = backStackEntry.arguments?.getBoolean("wasHomeScreen") ?: true
+
+            BackHandler(
+                onBack = {
+                    navController.popBackStack()
+                    homeViewModel.isQrCardOpen(false)
+                }
+            )
+
             QrCardFullScreen(
                 modifier = Modifier.fillMaxSize(),
-                qrCode = qrCardState.value.qrCard,
+                qrCodeForApp = qrCardState.value.qrCard,
                 onClose = {
                     homeViewModel.isQrCardOpen(false)
                     navController.popBackStack()
                 },
                 onFavoriteClick = { },
                 onShare = { },
-                onDownload = { }
+                onSave = { },
+                wasHomeScreen = wasHomeScreen
             )
         }
 

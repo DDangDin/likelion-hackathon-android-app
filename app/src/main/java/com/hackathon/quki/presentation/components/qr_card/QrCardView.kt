@@ -15,6 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,8 +33,10 @@ import coil.compose.AsyncImage
 import com.hackathon.quki.R
 import com.hackathon.quki.core.common.Constants.megaCoffeeMenu
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
+import com.hackathon.quki.core.utils.CustomRippleEffect.shimmerEffect
 import com.hackathon.quki.data.source.remote.Content
-import com.hackathon.quki.data.source.remote.QrCode
+import com.hackathon.quki.data.source.remote.QrCodeForApp
+import com.hackathon.quki.data.source.remote.StoreId
 import com.hackathon.quki.ui.theme.QukiColorGray_2
 import com.hackathon.quki.ui.theme.QukiColorGray_3
 import com.hackathon.quki.ui.theme.QukiColorMain
@@ -38,9 +44,13 @@ import com.hackathon.quki.ui.theme.QukiColorMain
 @Composable
 fun QrCardView(
     modifier: Modifier = Modifier,
-    qrCode: QrCode,
+    qrCodeForApp: QrCodeForApp,
     onFavoriteClick: () -> Unit
 ) {
+
+    var isLoading by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     Box(
         modifier = modifier
@@ -65,11 +75,14 @@ fun QrCardView(
                 AsyncImage(
                     modifier = Modifier
                         .size(90.dp)
-                        .clip(RoundedCornerShape(10.dp)),
-                    model = qrCode.image,
+                        .clip(RoundedCornerShape(10.dp))
+                        .shimmerEffect(isLoading),
+                    model = qrCodeForApp.image,
                     contentDescription = "qr_image",
                     alignment = Alignment.Center,
                     contentScale = ContentScale.Crop,
+                    onLoading = { isLoading = true },
+                    onSuccess = { isLoading = false }
                 )
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -77,25 +90,25 @@ fun QrCardView(
                 ) {
                     Text(
                         modifier = Modifier.padding(bottom = 4.dp),
-                        text = qrCode.title,
+                        text = qrCodeForApp.title,
                         fontSize = 14.sp,
                         fontWeight = FontWeight(700),
                         color = QukiColorGray_3
                     )
                     Text(
-                        text = qrCode.storeId.toString(),
+                        text = qrCodeForApp.storeId.storeName,
                         fontSize = 10.sp,
                         fontWeight = FontWeight(400),
                         color = QukiColorMain
                     )
                     Text(
-                        text = megaCoffeeMenu[qrCode.content.id]!!,
+                        text = megaCoffeeMenu[qrCodeForApp.contentEntity.id]!!,
                         fontSize = 14.sp,
                         fontWeight = FontWeight(400),
                         color = QukiColorGray_2
                     )
                     Text(
-                        text = megaCoffeeMenu[qrCode.content.id]!!,
+                        text = qrCodeForApp.content,
                         fontSize = 12.sp,
                         fontWeight = FontWeight(400),
                         color = QukiColorGray_2
@@ -111,7 +124,7 @@ fun QrCardView(
                         interactionSource = MutableInteractionSource(),
                         onClick = onFavoriteClick
                     ),
-                painter = if (qrCode.isFavorite) {
+                painter = if (qrCodeForApp.isFavorite) {
                     painterResource(id = R.drawable.img_favorite_y)
                 } else {
                     painterResource(id = R.drawable.img_favorite_n)
@@ -125,21 +138,23 @@ fun QrCardView(
 @Preview
 @Composable
 fun QrCardViewPreview() {
-    QrCardView(qrCode = QrCode(
-        id = 10,
-        content = Content(
-            id = 3,
-            url = "",
-            type = "커피",
-            count = 1,
-            price = 1000
-        ),
-        isFavorite = false,
-        image = "https://images.dog.ceo/breeds/hound-plott/hhh_plott002.jpg",
-        price = 100,
-        storeId = 10,
+    QrCardView(qrCodeForApp = QrCodeForApp(
         title = "내 최애 메뉴",
-        userId = 1
+        storeId = StoreId(
+            store_id = 10,
+            storeName = "메가커피"
+        ),
+        price = 1000,
+        image = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
+        isFavorite = false,
+        contentEntity = Content(
+            id = 3,
+            price = 1000,
+            count = 1,
+            type = "커피",
+            url = "" // QrImage
+        ),
+        content = "옵션1, 옵션2, ..."
     ),
         onFavoriteClick = {}
     )

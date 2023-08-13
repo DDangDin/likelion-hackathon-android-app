@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.hackathon.quki.data.source.remote.Content
-import com.hackathon.quki.data.source.remote.QrCode
+import com.hackathon.quki.data.source.remote.QrCodeForApp
+import com.hackathon.quki.data.source.remote.StoreId
 import com.hackathon.quki.domain.repository.CategoryRepository
 import com.hackathon.quki.presentation.state.HomeQrUiEvent
 import com.hackathon.quki.presentation.state.QrCardState
@@ -50,30 +51,33 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    // For Navigation BottomBar
     fun isQrCardOpen(value: Boolean) = _isQrCardOpen.update { value }
 
     fun getQrCards() {
         Log.d("HomeViewModel_Log", "HomeViewModel-getQrCards Trigger")
         _qrCardsState.update { it.copy(loading = true) }
 
-        val testQrCodeList = arrayListOf<QrCode>()
+        val testQrCodeList = arrayListOf<QrCodeForApp>()
         for (i in 1..10) {
             testQrCodeList.add(
-                QrCode(
-                    userId = 1,
+                QrCodeForApp(
                     title = "내 최애 메뉴",
-                    storeId = 10,
+                    storeId = StoreId(
+                        store_id = 10,
+                        storeName = "메가커피"
+                    ),
                     price = 1000,
-                    image = "https://images.dog.ceo/breeds/hound-plott/hhh_plott002.jpg",
+                    image = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
                     isFavorite = false,
-                    content = Content(
+                    contentEntity = Content(
                         id = if (i == 10) 10 else 3,
                         price = 1000,
                         count = 1,
                         type = "커피",
                         url = "" // QrImage
                     ),
-                    id = 7
+                    content = "옵션1, 옵션2, ..."
                 )
             )
         }

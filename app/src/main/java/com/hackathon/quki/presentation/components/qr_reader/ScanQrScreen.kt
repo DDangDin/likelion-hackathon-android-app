@@ -37,6 +37,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.hackathon.quki.R
+import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 import com.hackathon.quki.presentation.viewmodel.ScanQrViewModel
 import java.util.concurrent.Executors
@@ -49,7 +50,8 @@ fun ScanQrScreen(
     modifier: Modifier = Modifier,
     scanQrViewModel: ScanQrViewModel,
     cameraM: CameraManager,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    updateQrCard: (QrCodeForApp) -> Unit
 ) {
 
     lateinit var cameraController: CameraControl
@@ -125,11 +127,16 @@ fun ScanQrScreen(
                     val barcode = barcodeList.getOrNull(0)
                     barcode?.rawValue?.let { value ->
                         // QrCode Data in here...
+
+                        Log.d("KioskQrCodeValue", value)
+
                         cameraProvider.unbindAll()
                         Toast.makeText(context, value, Toast.LENGTH_LONG).show()
                         val jsonValue = value.substring(1, value.length - 1)
                         val parseJsonValue = Gson().fromJson(jsonValue, KioskQrCode::class.java)
-                        Log.d("KioskQrCodeValue", parseJsonValue.url)
+//                        Log.d("KioskQrCodeValue", parseJsonValue.url)
+//                        updateQrCard(parseJsonValue.)
+
                         // onNavigate
                     }
                 }
@@ -139,6 +146,7 @@ fun ScanQrScreen(
                 .addOnCompleteListener {
                     imageProxy.image?.close()
                     imageProxy.close()
+                    Log.d("ScanQrActivity_LifeCycle (Compose)", "ScanQrComposable (imageProxy close)")
                 }
         }
     }
@@ -189,6 +197,7 @@ fun ScanQrScreen(
     DisposableEffect(Unit) {
         onDispose {
             cameraExecutor.shutdown()
+            Log.d("ScanQrActivity_LifeCycle (Compose)", "ScanQrComposable (cameraExecutor shutdown)")
         }
     }
 }

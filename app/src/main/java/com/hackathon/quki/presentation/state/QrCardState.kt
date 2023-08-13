@@ -1,9 +1,9 @@
 package com.hackathon.quki.presentation.state
 
-import com.hackathon.quki.data.source.remote.QrCode
+import com.hackathon.quki.data.source.remote.QrCodeForApp
 
 data class QrCardState(
-    val qrCard: QrCode? = null,
+    val qrCard: QrCodeForApp? = null,
     val loading: Boolean = false,
     val error: String = ""
 )

@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.hackathon.quki.R
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
-import com.hackathon.quki.data.source.remote.QrCode
+import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.presentation.components.home.filter.HomeFilterBar
 import com.hackathon.quki.presentation.components.qr_card.QrCardView
 import com.hackathon.quki.presentation.state.CategoryUiEvent
@@ -44,10 +44,11 @@ fun HomeScreen(
     onOpenFilter: () -> Unit,
     filterList: List<CategoryEntity>,
     onFilterDelete: (CategoryUiEvent, CategoryEntity) -> Unit,
-    qrCodeList: List<QrCode>,
+    qrCodeList: List<QrCodeForApp>,
     onEvent: (HomeQrUiEvent) -> Unit,
     onOpenQrCard: () -> Unit
 ) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -115,6 +116,7 @@ fun HomeScreen(
                     contentPadding = PaddingValues(top = 10.dp, bottom = 58.dp)
                 ) {
                     items(qrCodeList) { qrCode ->
+
                         QrCardView(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -135,7 +137,7 @@ fun HomeScreen(
 //                                    interactionSource = MutableInteractionSource(),
 //                                    onClick = { onQrCardClick(qrCode) }
 //                                ),
-                            qrCode = qrCode,
+                            qrCodeForApp = qrCode,
                             onFavoriteClick = {}
                         )
                     }

@@ -10,3 +10,7 @@ data class KioskQrCode(
     val type: String,
     val url: String
 )
+
+// fun KioskQrCode.toQrCodeForApp(): QrCodeForApp = QrCodeForApp(
+//
+// )
