@@ -3,9 +3,10 @@ package com.hackathon.quki.presentation.viewmodel
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.hackathon.quki.data.source.remote.Content
 import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.StoreId
+import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
+import com.hackathon.quki.data.source.remote.kiosk.Options
 import com.hackathon.quki.domain.repository.CategoryRepository
 import com.hackathon.quki.presentation.state.HomeQrUiEvent
 import com.hackathon.quki.presentation.state.QrCardState
@@ -62,22 +63,28 @@ class HomeViewModel @Inject constructor(
         for (i in 1..10) {
             testQrCodeList.add(
                 QrCodeForApp(
-                    title = "내 최애 메뉴",
+                    title = "내 QR 카드 (메가커피)",
                     storeId = StoreId(
-                        store_id = 10,
+                        storeId = 10,
                         storeName = "메가커피"
                     ),
                     price = 1000,
-                    image = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
+                    imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=[{\"id\":4,\"type\":\"coffee\",\"price\":2900,\"options\":{},\"count\":1,\"url\":\"/static/media/Caffe_Latte_Ice.5b9aaf15c5ae4dc5eca8.jpeg\",\"ice\":true,\"cream\":true,\"infomation\":0},{\"id\":3,\"type\":\"coffee\",\"price\":1500,\"options\":{},\"count\":1,\"url\":\"/static/media/Americano.44df8d959195ca031e7c.jpeg\",\"ice\":false,\"cream\":false,\"infomation\":0},{\"id\":37,\"type\":\"drink\",\"price\":3800,\"options\":{},\"count\":1,\"url\":\"/static/media/Brown_Sugar_Latte(No_Bubble).cf34cad9cf7de2aa10f8.jpeg\",\"ice\":true,\"cream\":false,\"infomation\":0},{\"id\":38,\"type\":\"drink\",\"price\":3800,\"options\":{},\"count\":1,\"url\":\"/static/media/Brown_Sugar_Milktea_Latte(No_Bubble).7278aad3a76b85733417.jpeg\",\"ice\":true,\"cream\":false,\"infomation\":0},{\"id\":40,\"type\":\"drink\",\"price\":3000,\"options\":{},\"count\":1,\"url\":\"/static/media/Grain_Latte.3c43bfaf0eb6a2b58baa.jpeg\",\"ice\":false,\"cream\":true,\"infomation\":0}]`",
                     isFavorite = false,
-                    contentEntity = Content(
-                        id = if (i == 10) 10 else 3,
+                    kioskEntity = KioskQrCode(
+                        id = 3,
                         price = 1000,
                         count = 1,
                         type = "커피",
-                        url = "" // QrImage
+                        url = "", // QrImage
+                        options = Options("", "", ""),
+                        ice = false,
+                        cream = false,
+                        information = 1
                     ),
-                    content = "옵션1, 옵션2, ..."
+                    options = "옵션1, 옵션2, 옵션3",
+                    menus = "메뉴메뉴메뉴-1, 메뉴메뉴메뉴-2, 메뉴메뉴메뉴-3",
+                    count = 0
                 )
             )
         }

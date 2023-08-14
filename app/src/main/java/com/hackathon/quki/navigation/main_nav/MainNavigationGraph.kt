@@ -1,10 +1,11 @@
-package com.hackathon.quki.navigation
+package com.hackathon.quki.navigation.main_nav
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hackathon.quki.navigation.Screen
 import com.hackathon.quki.navigation.bottom_nav_bar.BottomNavigation
 import com.hackathon.quki.presentation.components.login.LoginScreen
 import com.hackathon.quki.presentation.viewmodel.HomeViewModel

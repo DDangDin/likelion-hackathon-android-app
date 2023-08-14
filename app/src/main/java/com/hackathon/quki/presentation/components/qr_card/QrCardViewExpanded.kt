@@ -38,11 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.hackathon.quki.R
-import com.hackathon.quki.core.common.Constants.megaCoffeeMenu
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
-import com.hackathon.quki.data.source.remote.Content
 import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.StoreId
+import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
+import com.hackathon.quki.data.source.remote.kiosk.Options
 import com.hackathon.quki.ui.theme.QukiColorBlack
 import com.hackathon.quki.ui.theme.QukiColorGray_3
 import com.hackathon.quki.ui.theme.QukiColorMain
@@ -131,7 +131,7 @@ fun QrCardViewExpanded(
             }
             AsyncImage(
                 modifier = Modifier.size(280.dp),
-                model = qrCodeForApp.image,
+                model = qrCodeForApp.imageUrl,
                 contentDescription = "qrcode image",
                 contentScale = ContentScale.Crop,
             )
@@ -175,18 +175,23 @@ fun QrCardViewExpanded(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(
-                    text = megaCoffeeMenu[qrCodeForApp.contentEntity.id]!!,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight(700),
-                    color = QukiColorGray_3
-                )
-                Text(
-                    text = qrCodeForApp.content,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight(700),
-                    color = QukiColorMain
-                )
+                val menuList = qrCodeForApp.menus.split(",")
+                val optionList = qrCodeForApp.options.split(",")
+
+                for (i in 1 until menuList.size) {
+                    Text(
+                        text = menuList[i],
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight(700),
+                        color = QukiColorGray_3
+                    )
+                    Text(
+                        text = optionList[i],
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(700),
+                        color = QukiColorMain
+                    )
+                }
             }
             Text(
                 modifier = Modifier
@@ -208,22 +213,28 @@ fun QrCardViewExpandedPreview() {
     QrCardViewExpanded(
         modifier = Modifier.fillMaxSize(),
         qrCodeForApp = QrCodeForApp(
-            title = "내 최애 메뉴",
+            title = "내 QR 카드 (메가커피)",
             storeId = StoreId(
-                store_id = 10,
+                storeId = 10,
                 storeName = "메가커피"
             ),
-            price = 1000,
-            image = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
+            price = 6200,
+            imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
             isFavorite = false,
-            contentEntity = Content(
+            kioskEntity = KioskQrCode(
                 id = 3,
                 price = 1000,
                 count = 1,
                 type = "커피",
-                url = "" // QrImage
+                url = "", // QrImage
+                options = Options("", "", ""),
+                ice = false,
+                cream = false,
+                information = 1
             ),
-            content = "옵션1, 옵션2, ..."
+            options = "옵션1, 옵션2, 옵션3",
+            menus = "메뉴메뉴메뉴-1,메뉴메뉴메뉴-2, 메뉴메뉴메뉴-3",
+            count = 0
         ),
         onFavoriteClick = {},
         likeCount = 122

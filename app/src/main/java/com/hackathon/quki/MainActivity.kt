@@ -10,7 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.hackathon.quki.navigation.MainNavigationGraph
+import com.hackathon.quki.navigation.main_nav.MainNavigationGraph
 import com.hackathon.quki.presentation.viewmodel.HomeViewModel
 import com.hackathon.quki.presentation.viewmodel.ScanQrViewModel
 import com.hackathon.quki.ui.theme.QukiTheme

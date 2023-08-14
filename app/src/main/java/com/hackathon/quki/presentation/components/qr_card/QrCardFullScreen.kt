@@ -1,6 +1,7 @@
 package com.hackathon.quki.presentation.components.qr_card
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,16 +16,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hackathon.quki.R
-import com.hackathon.quki.data.source.remote.Content
 import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.StoreId
+import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
+import com.hackathon.quki.data.source.remote.kiosk.Options
 import com.hackathon.quki.presentation.components.common.CommonTopBar
+import com.hackathon.quki.presentation.state.QrCardState
 import com.hackathon.quki.ui.theme.QukiColorMain
 
 @Composable
 fun QrCardFullScreen(
     modifier: Modifier = Modifier,
-    qrCodeForApp: QrCodeForApp?,
+    qrCardState: QrCardState,
     onClose: () -> Unit,
     onFavoriteClick: () -> Unit,
     onShare: () -> Unit,
@@ -32,8 +35,10 @@ fun QrCardFullScreen(
     wasHomeScreen: Boolean = true
 ) {
 
+    val qrCodeForApp = qrCardState.qrCard
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -44,19 +49,36 @@ fun QrCardFullScreen(
             onClose = onClose,
             title = stringResource(id = R.string.qr_card_full_screen_title)
         )
-        if (qrCodeForApp == null) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(100.dp),
-                strokeWidth = 2.dp,
-                color = QukiColorMain
-            )
-        } else {
+        if (qrCardState.status) {
             QrCardViewExpanded(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp),
                 likeCount = 0,
-                qrCodeForApp = qrCodeForApp,
+                qrCodeForApp = qrCodeForApp ?: QrCodeForApp(
+                    title = "내 최애 메뉴",
+                    storeId = StoreId(
+                        storeId = 10,
+                        storeName = "메가커피"
+                    ),
+                    price = 1000,
+                    imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
+                    isFavorite = false,
+                    kioskEntity = KioskQrCode(
+                        id = 3,
+                        price = 1000,
+                        count = 1,
+                        type = "커피",
+                        url = "", // QrImage
+                        options = Options("", "", ""),
+                        ice = false,
+                        cream = false,
+                        information = 1
+                    ),
+                    options = "옵션1, 옵션2, ...",
+                    menus = "",
+                    count = 0
+                ),
                 onFavoriteClick = onFavoriteClick,
             )
             if (!wasHomeScreen) {
@@ -70,6 +92,16 @@ fun QrCardFullScreen(
             } else {
                 Spacer(modifier = Modifier.size(150.dp))
             }
+        } else {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(100.dp),
+                    strokeWidth = 2.dp,
+                    color = QukiColorMain
+                )
+            }
         }
     }
 }
@@ -79,23 +111,31 @@ fun QrCardFullScreen(
 fun QrCardFullScreenPreview() {
     QrCardFullScreen(
         modifier = Modifier.fillMaxSize(),
-        qrCodeForApp = QrCodeForApp(
-            title = "내 최애 메뉴",
-            storeId = StoreId(
-                store_id = 10,
-                storeName = "메가커피"
-            ),
-            price = 1000,
-            image = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
-            isFavorite = false,
-            contentEntity = Content(
-                id = 3,
+        qrCardState = QrCardState(
+            qrCard = QrCodeForApp(
+                title = "내 최애 메뉴",
+                storeId = StoreId(
+                    storeId = 10,
+                    storeName = "메가커피"
+                ),
                 price = 1000,
-                count = 1,
-                type = "커피",
-                url = "" // QrImage
-            ),
-            content = "옵션1, 옵션2, ..."
+                imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
+                isFavorite = false,
+                kioskEntity = KioskQrCode(
+                    id = 3,
+                    price = 1000,
+                    count = 1,
+                    type = "커피",
+                    url = "", // QrImage
+                    options = Options("", "", ""),
+                    ice = false,
+                    cream = false,
+                    information = 1
+                ),
+                options = "옵션1, 옵션2, ...",
+                menus = "",
+                count = 0
+            )
         ),
         onClose = {},
         onFavoriteClick = {},

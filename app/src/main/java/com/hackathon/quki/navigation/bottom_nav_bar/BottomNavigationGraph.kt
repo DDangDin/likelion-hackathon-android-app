@@ -97,7 +97,7 @@ fun BottomNavigationGraph(
 
             QrCardFullScreen(
                 modifier = Modifier.fillMaxSize(),
-                qrCodeForApp = qrCardState.value.qrCard,
+                qrCardState = qrCardState.value,
                 onClose = {
                     homeViewModel.isQrCardOpen(false)
                     navController.popBackStack()

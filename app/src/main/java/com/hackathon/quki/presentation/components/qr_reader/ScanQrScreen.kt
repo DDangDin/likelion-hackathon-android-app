@@ -22,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,15 +31,12 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.gson.Gson
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.hackathon.quki.R
-import com.hackathon.quki.data.source.remote.QrCodeForApp
-import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 import com.hackathon.quki.presentation.viewmodel.ScanQrViewModel
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
@@ -51,8 +49,11 @@ fun ScanQrScreen(
     scanQrViewModel: ScanQrViewModel,
     cameraM: CameraManager,
     onClose: () -> Unit,
-    updateQrCard: (QrCodeForApp) -> Unit
+    updateQrCard: (String) -> Unit,
+    onNavigate: () -> Unit
 ) {
+
+    val qrCardState = scanQrViewModel.qrCardState.collectAsState()
 
     lateinit var cameraController: CameraControl
     lateinit var cameraInfo: CameraInfo
@@ -96,7 +97,7 @@ fun ScanQrScreen(
             previewView = previewView,
             onFlashClick = {
                 // Torch On/OFF
-                when(cameraInfo.torchState.value){
+                when (cameraInfo.torchState.value) {
                     TorchState.ON -> cameraController.enableTorch(false)
                     TorchState.OFF -> cameraController.enableTorch(true)
                 }
@@ -132,11 +133,9 @@ fun ScanQrScreen(
 
                         cameraProvider.unbindAll()
                         Toast.makeText(context, value, Toast.LENGTH_LONG).show()
-                        val jsonValue = value.substring(1, value.length - 1)
-                        val parseJsonValue = Gson().fromJson(jsonValue, KioskQrCode::class.java)
-//                        Log.d("KioskQrCodeValue", parseJsonValue.url)
-//                        updateQrCard(parseJsonValue.)
-
+                        updateQrCard(value)
+                        onNavigate()
+                        Log.d("parsing_log",  "Scan Success!")
                         // onNavigate
                     }
                 }
@@ -146,7 +145,10 @@ fun ScanQrScreen(
                 .addOnCompleteListener {
                     imageProxy.image?.close()
                     imageProxy.close()
-                    Log.d("ScanQrActivity_LifeCycle (Compose)", "ScanQrComposable (imageProxy close)")
+                    Log.d(
+                        "ScanQrActivity_LifeCycle (Compose)",
+                        "ScanQrComposable (imageProxy close)"
+                    )
                 }
         }
     }
@@ -197,7 +199,10 @@ fun ScanQrScreen(
     DisposableEffect(Unit) {
         onDispose {
             cameraExecutor.shutdown()
-            Log.d("ScanQrActivity_LifeCycle (Compose)", "ScanQrComposable (cameraExecutor shutdown)")
+            Log.d(
+                "ScanQrActivity_LifeCycle (Compose)",
+                "ScanQrComposable (cameraExecutor shutdown)"
+            )
         }
     }
 }

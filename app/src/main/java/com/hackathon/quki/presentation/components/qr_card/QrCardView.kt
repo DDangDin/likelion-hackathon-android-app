@@ -34,9 +34,10 @@ import com.hackathon.quki.R
 import com.hackathon.quki.core.common.Constants.megaCoffeeMenu
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
 import com.hackathon.quki.core.utils.CustomRippleEffect.shimmerEffect
-import com.hackathon.quki.data.source.remote.Content
 import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.StoreId
+import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
+import com.hackathon.quki.data.source.remote.kiosk.Options
 import com.hackathon.quki.ui.theme.QukiColorGray_2
 import com.hackathon.quki.ui.theme.QukiColorGray_3
 import com.hackathon.quki.ui.theme.QukiColorMain
@@ -77,7 +78,7 @@ fun QrCardView(
                         .size(90.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .shimmerEffect(isLoading),
-                    model = qrCodeForApp.image,
+                    model = qrCodeForApp.imageUrl,
                     contentDescription = "qr_image",
                     alignment = Alignment.Center,
                     contentScale = ContentScale.Crop,
@@ -102,13 +103,13 @@ fun QrCardView(
                         color = QukiColorMain
                     )
                     Text(
-                        text = megaCoffeeMenu[qrCodeForApp.contentEntity.id]!!,
+                        text = megaCoffeeMenu[qrCodeForApp.kioskEntity.id]!!,
                         fontSize = 14.sp,
                         fontWeight = FontWeight(400),
                         color = QukiColorGray_2
                     )
                     Text(
-                        text = qrCodeForApp.content,
+                        text = qrCodeForApp.options,
                         fontSize = 12.sp,
                         fontWeight = FontWeight(400),
                         color = QukiColorGray_2
@@ -141,20 +142,26 @@ fun QrCardViewPreview() {
     QrCardView(qrCodeForApp = QrCodeForApp(
         title = "내 최애 메뉴",
         storeId = StoreId(
-            store_id = 10,
+            storeId = 10,
             storeName = "메가커피"
         ),
         price = 1000,
-        image = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
+        imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
         isFavorite = false,
-        contentEntity = Content(
+        kioskEntity = KioskQrCode(
             id = 3,
             price = 1000,
             count = 1,
             type = "커피",
-            url = "" // QrImage
+            url = "", // QrImage
+            options = Options("", "", ""),
+            ice = false,
+            cream = false,
+            information = 1
         ),
-        content = "옵션1, 옵션2, ..."
+        options = "옵션1, 옵션2, ...",
+        menus = "",
+        count = 0
     ),
         onFavoriteClick = {}
     )

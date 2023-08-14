@@ -12,16 +12,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.hackathon.quki.navigation.Screen
-import com.hackathon.quki.presentation.components.qr_card.QrCardFullScreen
-import com.hackathon.quki.presentation.components.qr_reader.ScanQrScreen
+import com.hackathon.quki.navigation.scan_qr_nav.ScanQrNavigationGraph
 import com.hackathon.quki.presentation.viewmodel.ScanQrViewModel
 import com.hackathon.quki.ui.theme.QukiTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +28,7 @@ class ScanQrActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var cameraM = getSystemService(CAMERA_SERVICE) as CameraManager
+        val cameraM = getSystemService(CAMERA_SERVICE) as CameraManager
 
         setContent {
             QukiTheme {
@@ -55,33 +50,12 @@ class ScanQrActivity : ComponentActivity() {
 //                            modifier = Modifier.padding(top = 48.dp)
 //                        )
 
-                        NavHost(
+                        ScanQrNavigationGraph(
                             navController = navController,
-                            startDestination = Screen.QrScanScreen.route!!
-                        ) {
-                            composable(route = Screen.QrScanScreen.route) {
-                                ScanQrScreen(
-                                    modifier = Modifier.fillMaxSize(),
-                                    scanQrViewModel = scanQrViewModel,
-                                    cameraM = cameraM,
-                                    onClose = { finish() },
-                                    updateQrCard = { scanQrViewModel.updateQrCardState(it) }
-                                )
-                            }
-
-                            composable(route = Screen.QrCardFull.route!!) {
-
-                                val qrCardState = scanQrViewModel.qrCardState.collectAsState()
-
-                                QrCardFullScreen(
-                                    qrCodeForApp = qrCardState.value.qrCard,
-                                    onClose = { finish() },
-                                    onFavoriteClick = {  },
-                                    onShare = {  },
-                                    onSave = {  }
-                                )
-                            }
-                        }
+                            scanQrViewModel = scanQrViewModel,
+                            cameraM = cameraM,
+                            onFinish = { finish() }
+                        )
                     }
                 }
             }

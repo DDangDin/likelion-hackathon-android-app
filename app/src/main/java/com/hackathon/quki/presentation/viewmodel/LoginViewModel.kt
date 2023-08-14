@@ -4,15 +4,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hackathon.quki.core.common.MegaCoffee
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.domain.repository.CategoryRepository
 import com.hackathon.quki.presentation.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +28,12 @@ class LoginViewModel @Inject constructor(
                 dbInsertTest()
             }
         }
+
+        // 매핑 데이터 초기화
+        MegaCoffee.getMegaCoffeeMenu()
+        MegaCoffee.getMegaCoffeeKioskCategory()
+        MegaCoffee.getMegaCoffeeStore()
+        MegaCoffee.getMegaCoffeeCategory()
     }
     fun checkLogin() {
         viewModelScope.launch {

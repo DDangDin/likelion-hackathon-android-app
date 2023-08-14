@@ -2,6 +2,7 @@ package com.hackathon.quki.data.source.remote
 
 import com.google.gson.annotations.SerializedName
 
+// For Backend
 data class QrCode(
     val content: String,
     val image: String,
