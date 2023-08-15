@@ -90,7 +90,7 @@ class HomeViewModel @Inject constructor(
             for (i in 1..10) {
                 testQrCodeList.add(
                     QrCodeForApp(
-                        title = "내 QR 카드 (메가커피)",
+                        title = "내 QR 카드 (메가커피) ${i}",
                         storeId = StoreId(
                             storeId = 10,
                             storeName = "메가커피"
@@ -112,7 +112,12 @@ class HomeViewModel @Inject constructor(
                         options = "옵션1-옵션2-옵션3",
                         menus = "메뉴메뉴메뉴1-메뉴메뉴메뉴2-메뉴메뉴메뉴3",
                         count = 0,
-                        category = if (i % 2 == 0) "카페" else ""
+                        category = when (i) {
+                            1, 2 -> "패스트푸드"
+                            3, 4 -> "한식"
+                            5, 6 -> "일식"
+                            else -> "카페"
+                        }
                     )
                 )
             }
