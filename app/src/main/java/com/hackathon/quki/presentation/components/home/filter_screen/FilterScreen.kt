@@ -23,7 +23,8 @@ fun FilterScreen(
     modifier: Modifier = Modifier,
     categoryList: List<CategoryEntity>,
     onClose: () -> Unit,
-    categoryUiEvent: (CategoryUiEvent, CategoryEntity) -> Unit
+    categoryUiEvent: (CategoryUiEvent, CategoryEntity) -> Unit,
+    getFilteredQrCards: () -> Unit
 ) {
 
     LaunchedEffect(key1 = categoryList) {
@@ -47,21 +48,24 @@ fun FilterScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 35.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(30.dp, alignment = Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(
+                30.dp,
+                alignment = Alignment.CenterVertically
+            )
         ) {
             FilterContent(
                 title = stringResource(id = R.string.filter_content_align_title),
                 firstSubTitle = stringResource(id = R.string.filter_sub_content_align_text_1),
                 secondSubTitle = stringResource(id = R.string.filter_sub_content_align_text_2),
-                onFirstSubTitleClick = {  },
-                onSecondSubTitleClick = {  }
+                onFirstSubTitleClick = { },
+                onSecondSubTitleClick = { }
             )
             FilterContent(
                 title = stringResource(id = R.string.filter_content_view_title),
                 firstSubTitle = stringResource(id = R.string.filter_sub_content_view_text_1),
                 secondSubTitle = stringResource(id = R.string.filter_sub_content_view_text_2),
-                onFirstSubTitleClick = {  },
-                onSecondSubTitleClick = {  }
+                onFirstSubTitleClick = { },
+                onSecondSubTitleClick = { }
             )
             CategoryContent(
                 title = stringResource(id = R.string.filter_content_category_title),
@@ -73,6 +77,7 @@ fun FilterScreen(
                     } else {
                         categoryUiEvent(CategoryUiEvent.UnChecked, item)
                     }
+                    getFilteredQrCards()
                 }
             )
         }
@@ -86,6 +91,7 @@ fun FilterScreenPreview() {
         modifier = Modifier.fillMaxSize(),
         categoryList = emptyList(),
         onClose = {},
-        categoryUiEvent = {event, item ->}
+        categoryUiEvent = { event, item -> },
+        getFilteredQrCards = {}
     )
 }

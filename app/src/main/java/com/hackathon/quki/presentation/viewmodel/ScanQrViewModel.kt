@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.hackathon.quki.core.common.MegaCoffee.megaCoffeeMenuList
+import com.hackathon.quki.core.common.MegaCoffee.megaCoffeeOptionCreamMapping
+import com.hackathon.quki.core.common.MegaCoffee.megaCoffeeOptionIceMapping
+import com.hackathon.quki.core.common.MegaCoffee.megaCoffeeOptionShotMapping
 import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 import com.hackathon.quki.data.source.remote.kiosk.toQrCodeForApp
@@ -48,26 +51,33 @@ class ScanQrViewModel @Inject constructor(
         jsonArray.forEach { json ->
 
             // kioskEntity 데이터 값 사용
-
             val entity = Gson().fromJson(json, KioskQrCode::class.java).toQrCodeForApp(json.toString())
+
+            // menus
             val menuId = entity.kioskEntity.id
             menuList.add(megaCoffeeMenuList[menuId]!!)
-            val options = "(얼음: ${entity.kioskEntity.options.ice ?: "X"}, 휘핑: ${entity.kioskEntity.options.cream ?: "X"}, 샷: ${entity.kioskEntity.options.shot ?: "X"})"
+
+            // options
+            val options = "(얼음: ${megaCoffeeOptionIceMapping(entity.kioskEntity.options.ice ?: "basic")}, " +
+                    "휘핑: ${megaCoffeeOptionCreamMapping(entity.kioskEntity.options.cream ?: "기본")}, " +
+                    "샷: ${megaCoffeeOptionShotMapping(entity.kioskEntity.options.shot ?: "기본")})"
             optinonList.add(options)
+
+            // price, count
             price += (entity.kioskEntity.price) * entity.kioskEntity.count
             count += entity.kioskEntity.count
         }
 
         val qrCard = Gson().fromJson(jsonArray[0], KioskQrCode::class.java).toQrCodeForApp(value)
         val qrCardCopy = qrCard.copy(
-            menus = menuList.joinToString(","),
-            options = optinonList.joinToString(","),
+            menus = menuList.joinToString("-"),
+            options = optinonList.joinToString("-"),
             price = price,
             count = count
         )
 
-        Log.d("parsing_log",  "menuList: ${menuList.joinToString(",")}")
-        Log.d("parsing_log",  "optionList: ${optinonList.joinToString(",")}")
+        Log.d("parsing_log",  "menuList: ${menuList.joinToString("-")}")
+        Log.d("parsing_log",  "optionList: ${optinonList.joinToString("-")}")
 
         _qrCardState.update { it.copy(loading = false, qrCard = qrCardCopy, status = true) }
     }

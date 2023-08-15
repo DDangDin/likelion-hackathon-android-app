@@ -100,6 +100,9 @@ fun BottomNavigation(
                     },
                     categoryUiEvent = { event, item ->
                         categoryViewModel.uiEventForCategory(event, item)
+                    },
+                    getFilteredQrCards = {
+                        homeViewModel.getQrCards()
                     }
                 )
             }

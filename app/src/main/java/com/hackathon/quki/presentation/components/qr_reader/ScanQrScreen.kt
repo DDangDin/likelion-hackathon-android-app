@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraManager
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraControl
@@ -132,7 +131,7 @@ fun ScanQrScreen(
                         Log.d("KioskQrCodeValue", value)
 
                         cameraProvider.unbindAll()
-                        Toast.makeText(context, value, Toast.LENGTH_LONG).show()
+//                        Toast.makeText(context, value, Toast.LENGTH_LONG).show()
                         updateQrCard(value)
                         onNavigate()
                         Log.d("parsing_log",  "Scan Success!")

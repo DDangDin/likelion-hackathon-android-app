@@ -1,5 +1,6 @@
 package com.hackathon.quki.presentation.components.qr_card
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,7 +54,7 @@ fun QrCardFullScreen(
             QrCardViewExpanded(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 25.dp),
+                    .padding(start = 25.dp, end = 25.dp, bottom = 25.dp),
                 likeCount = 0,
                 qrCodeForApp = qrCodeForApp ?: QrCodeForApp(
                     title = "내 최애 메뉴",
@@ -77,18 +78,22 @@ fun QrCardFullScreen(
                     ),
                     options = "옵션1, 옵션2, ...",
                     menus = "",
-                    count = 0
+                    count = 0,
+                    category = ""
                 ),
                 onFavoriteClick = onFavoriteClick,
             )
+            Log.d("wasHomeScreen", "wasHomeScreen: ${wasHomeScreen}")
             if (!wasHomeScreen) {
-                QrCardFullScreenBottomBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 25.dp, vertical = 30.dp),
-                    onShare = onShare,
-                    onDownload = onSave
-                )
+//                QrCardFullScreenBottomBar(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(50.dp),
+////                        .padding(horizontal = 25.dp, vertical = 30.dp),
+//                    onShare = onShare,
+//                    onDownload = onSave
+//                )
+                Spacer(modifier = Modifier.size(150.dp))
             } else {
                 Spacer(modifier = Modifier.size(150.dp))
             }
@@ -134,7 +139,8 @@ fun QrCardFullScreenPreview() {
                 ),
                 options = "옵션1, 옵션2, ...",
                 menus = "",
-                count = 0
+                count = 0,
+                category = ""
             )
         ),
         onClose = {},

@@ -3,6 +3,7 @@ package com.hackathon.quki.presentation.viewmodel
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.StoreId
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
@@ -12,16 +13,18 @@ import com.hackathon.quki.presentation.state.HomeQrUiEvent
 import com.hackathon.quki.presentation.state.QrCardState
 import com.hackathon.quki.presentation.state.QrCardsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository
-): ViewModel() {
+) : ViewModel() {
 
     var searchText = mutableStateOf("")
         private set
@@ -44,10 +47,16 @@ class HomeViewModel @Inject constructor(
     }
 
     fun uiEvent(homeUiEvent: HomeQrUiEvent) {
-        when(homeUiEvent) {
+        when (homeUiEvent) {
             is HomeQrUiEvent.OpenQrCard -> {
-                _qrCardState.update { it.copy(loading = true) }
-                _qrCardState.update { it.copy(loading = false, qrCard = homeUiEvent.qrCode) }
+                _qrCardState.update { it.copy(loading = true, status = false) }
+                _qrCardState.update {
+                    it.copy(
+                        loading = false,
+                        qrCard = homeUiEvent.qrCode,
+                        status = true
+                    )
+                }
             }
         }
     }
@@ -55,41 +64,82 @@ class HomeViewModel @Inject constructor(
     // For Navigation BottomBar
     fun isQrCardOpen(value: Boolean) = _isQrCardOpen.update { value }
 
+//    fun getFilteredQrCards() {
+//        viewModelScope.launch {
+//            _qrCardsState.update { it.copy(loading = true) }
+//
+//            val categoryList = categoryRepository.getCategories() // -> DB에 있는 카테고리 데이터 들
+//            val categoryListFiltered = categoryList
+//                .filter { it.isFilterChecked }
+//                .map { it.name }
+//
+//            Log.d("CategoryDB_Log", categoryListFiltered.toString())
+//
+//            val filteredList = qrCardsState.value.qrCards.filter { it.category in categoryListFiltered }
+//
+//            _qrCardsState.update { it.copy(loading = false, qrCards = filteredList) }
+//        }
+//    }
+
     fun getQrCards() {
-        Log.d("HomeViewModel_Log", "HomeViewModel-getQrCards Trigger")
-        _qrCardsState.update { it.copy(loading = true) }
+        viewModelScope.launch {
+            Log.d("HomeViewModel_Log", "HomeViewModel-getQrCards Trigger")
+            _qrCardsState.update { it.copy(loading = true) }
 
-        val testQrCodeList = arrayListOf<QrCodeForApp>()
-        for (i in 1..10) {
-            testQrCodeList.add(
-                QrCodeForApp(
-                    title = "내 QR 카드 (메가커피)",
-                    storeId = StoreId(
-                        storeId = 10,
-                        storeName = "메가커피"
-                    ),
-                    price = 1000,
-                    imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=[{\"id\":4,\"type\":\"coffee\",\"price\":2900,\"options\":{},\"count\":1,\"url\":\"/static/media/Caffe_Latte_Ice.5b9aaf15c5ae4dc5eca8.jpeg\",\"ice\":true,\"cream\":true,\"infomation\":0},{\"id\":3,\"type\":\"coffee\",\"price\":1500,\"options\":{},\"count\":1,\"url\":\"/static/media/Americano.44df8d959195ca031e7c.jpeg\",\"ice\":false,\"cream\":false,\"infomation\":0},{\"id\":37,\"type\":\"drink\",\"price\":3800,\"options\":{},\"count\":1,\"url\":\"/static/media/Brown_Sugar_Latte(No_Bubble).cf34cad9cf7de2aa10f8.jpeg\",\"ice\":true,\"cream\":false,\"infomation\":0},{\"id\":38,\"type\":\"drink\",\"price\":3800,\"options\":{},\"count\":1,\"url\":\"/static/media/Brown_Sugar_Milktea_Latte(No_Bubble).7278aad3a76b85733417.jpeg\",\"ice\":true,\"cream\":false,\"infomation\":0},{\"id\":40,\"type\":\"drink\",\"price\":3000,\"options\":{},\"count\":1,\"url\":\"/static/media/Grain_Latte.3c43bfaf0eb6a2b58baa.jpeg\",\"ice\":false,\"cream\":true,\"infomation\":0}]`",
-                    isFavorite = false,
-                    kioskEntity = KioskQrCode(
-                        id = 3,
+            val testQrCodeList = arrayListOf<QrCodeForApp>()
+            for (i in 1..10) {
+                testQrCodeList.add(
+                    QrCodeForApp(
+                        title = "내 QR 카드 (메가커피)",
+                        storeId = StoreId(
+                            storeId = 10,
+                            storeName = "메가커피"
+                        ),
                         price = 1000,
-                        count = 1,
-                        type = "커피",
-                        url = "", // QrImage
-                        options = Options("", "", ""),
-                        ice = false,
-                        cream = false,
-                        information = 1
-                    ),
-                    options = "옵션1, 옵션2, 옵션3",
-                    menus = "메뉴메뉴메뉴-1, 메뉴메뉴메뉴-2, 메뉴메뉴메뉴-3",
-                    count = 0
+                        imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=[{\"id\":4,\"type\":\"coffee\",\"price\":2900,\"options\":{},\"count\":1,\"url\":\"/static/media/Caffe_Latte_Ice.5b9aaf15c5ae4dc5eca8.jpeg\",\"ice\":true,\"cream\":true,\"infomation\":0},{\"id\":3,\"type\":\"coffee\",\"price\":1500,\"options\":{},\"count\":1,\"url\":\"/static/media/Americano.44df8d959195ca031e7c.jpeg\",\"ice\":false,\"cream\":false,\"infomation\":0},{\"id\":37,\"type\":\"drink\",\"price\":3800,\"options\":{},\"count\":1,\"url\":\"/static/media/Brown_Sugar_Latte(No_Bubble).cf34cad9cf7de2aa10f8.jpeg\",\"ice\":true,\"cream\":false,\"infomation\":0},{\"id\":38,\"type\":\"drink\",\"price\":3800,\"options\":{},\"count\":1,\"url\":\"/static/media/Brown_Sugar_Milktea_Latte(No_Bubble).7278aad3a76b85733417.jpeg\",\"ice\":true,\"cream\":false,\"infomation\":0},{\"id\":40,\"type\":\"drink\",\"price\":3000,\"options\":{},\"count\":1,\"url\":\"/static/media/Grain_Latte.3c43bfaf0eb6a2b58baa.jpeg\",\"ice\":false,\"cream\":true,\"infomation\":0}]`",
+                        isFavorite = false,
+                        kioskEntity = KioskQrCode(
+                            id = 3,
+                            price = 1000,
+                            count = 1,
+                            type = "커피",
+                            url = "", // QrImage
+                            options = Options("", "", ""),
+                            ice = false,
+                            cream = false,
+                            information = 1
+                        ),
+                        options = "옵션1-옵션2-옵션3",
+                        menus = "메뉴메뉴메뉴1-메뉴메뉴메뉴2-메뉴메뉴메뉴3",
+                        count = 0,
+                        category = if (i % 2 == 0) "카페" else ""
+                    )
                 )
-            )
-        }
+            }
 
-        _qrCardsState.update { it.copy(loading = false, qrCards = testQrCodeList) }
+            // -> DB CRUD Delay: 불러 오기 전 Category Filter 체크 하는 부분(DB Insert)
+            // 때문에 딜레이가 생김
+            // <해결책>
+            // 1. HomeScreen QrCards 리스트에 로딩바를 보여줌
+            // 2. flow 를 좀 더 잘 설계 하기
+            delay(1000L)
+            val categoryList = categoryRepository.getCategories() // -> DB에 있는 카테고리 데이터 들
+            val categoryListFiltered = categoryList
+                .filter { it.isFilterChecked }
+                .map { it.name }
+
+            Log.d("CategoryDB_Log", categoryListFiltered.toString())
+
+            val filteredList = testQrCodeList.filter { it.category in categoryListFiltered }
+
+            val resultList = if (categoryListFiltered.isEmpty()) {
+                testQrCodeList
+            } else {
+                filteredList
+            }
+
+            _qrCardsState.update { it.copy(loading = false, qrCards = resultList) }
+        }
     }
 
 //    // TestCode (start)

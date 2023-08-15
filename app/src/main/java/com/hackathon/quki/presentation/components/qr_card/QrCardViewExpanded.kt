@@ -1,11 +1,13 @@
 package com.hackathon.quki.presentation.components.qr_card
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -169,40 +173,58 @@ fun QrCardViewExpanded(
                 )
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                val menuList = qrCodeForApp.menus.split(",")
-                val optionList = qrCodeForApp.options.split(",")
-
-                for (i in 1 until menuList.size) {
-                    Text(
-                        text = menuList[i],
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight(700),
-                        color = QukiColorGray_3
-                    )
-                    Text(
-                        text = optionList[i],
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(700),
-                        color = QukiColorMain
-                    )
-                }
+            LaunchedEffect(key1 = Unit) {
+                Log.d("QrCard_Log", qrCodeForApp.menus)
+                Log.d("QrCard_Log", qrCodeForApp.options)
             }
+
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 28.dp),
+                    .padding(top = 10.dp),
                 text = "${qrCodeForApp.price} 원",
                 fontSize = 18.sp,
                 fontWeight = FontWeight(700),
                 color = QukiColorGray_3,
                 textAlign = TextAlign.End
             )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray.copy(0.15f), RoundedCornerShape(10.dp)),
+            ) {
+                LazyColumn(
+                    modifier = Modifier.padding(horizontal = 5.dp),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    val menuList = qrCodeForApp.menus.split("-")
+                    val optionList = qrCodeForApp.options.split("-")
+
+                    items(menuList.size) { index ->
+
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = menuList[index],
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight(700),
+                            color = QukiColorGray_3,
+                            textAlign = TextAlign.Start
+                        )
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = optionList[index],
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(700),
+                            color = QukiColorMain,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+
+                }
+            }
         }
     }
 }
@@ -230,11 +252,12 @@ fun QrCardViewExpandedPreview() {
                 options = Options("", "", ""),
                 ice = false,
                 cream = false,
-                information = 1
+                information = 1,
             ),
-            options = "옵션1, 옵션2, 옵션3",
-            menus = "메뉴메뉴메뉴-1,메뉴메뉴메뉴-2, 메뉴메뉴메뉴-3",
-            count = 0
+            options = "옵션1-옵션2-옵션3",
+            menus = "메뉴메뉴메뉴-1-메뉴메뉴메뉴-2-메뉴메뉴메뉴-3",
+            count = 0,
+            category = ""
         ),
         onFavoriteClick = {},
         likeCount = 122

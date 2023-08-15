@@ -46,7 +46,7 @@ fun HomeScreen(
     onFilterDelete: (CategoryUiEvent, CategoryEntity) -> Unit,
     qrCodeList: List<QrCodeForApp>,
     onEvent: (HomeQrUiEvent) -> Unit,
-    onOpenQrCard: () -> Unit
+    onOpenQrCard: () -> Unit,
 ) {
 
     Box(
@@ -158,6 +158,6 @@ fun MainScreenPreview() {
         onFilterDelete = { event, item -> },
         qrCodeList = emptyList(),
         onEvent = {},
-        onOpenQrCard = {}
+        onOpenQrCard = {},
     )
 }

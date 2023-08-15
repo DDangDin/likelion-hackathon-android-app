@@ -49,7 +49,8 @@ fun ScanQrNavigationGraph(
                 onClose = onFinish,
                 onFavoriteClick = {  },
                 onShare = {  },
-                onSave = {  }
+                onSave = {  },
+                wasHomeScreen = false
             )
         }
     }

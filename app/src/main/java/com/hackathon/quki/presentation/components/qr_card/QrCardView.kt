@@ -161,7 +161,8 @@ fun QrCardViewPreview() {
         ),
         options = "옵션1, 옵션2, ...",
         menus = "",
-        count = 0
+        count = 0,
+        category = ""
     ),
         onFavoriteClick = {}
     )

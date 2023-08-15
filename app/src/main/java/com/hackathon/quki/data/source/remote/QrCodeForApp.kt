@@ -8,6 +8,7 @@ data class QrCodeForApp(
     val title: String,
     val options: String, // 옵션
     val menus: String, // 메뉴
+    val category: String, // 카테고리
     val imageUrl: String,
     val isFavorite: Boolean,
     val price: Int,

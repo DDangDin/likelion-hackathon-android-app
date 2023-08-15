@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor(
         checkLogin()
         viewModelScope.launch {
             if (categoryRepository.getCategories().isEmpty()) {
-                dbInsertTest()
+                categoryDataInitialized()
             }
         }
 
@@ -33,7 +33,6 @@ class LoginViewModel @Inject constructor(
         MegaCoffee.getMegaCoffeeMenu()
         MegaCoffee.getMegaCoffeeKioskCategory()
         MegaCoffee.getMegaCoffeeStore()
-        MegaCoffee.getMegaCoffeeCategory()
     }
     fun checkLogin() {
         viewModelScope.launch {
@@ -43,22 +42,23 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    // TestCode (start)
-    fun dbInsertTest() {
+    fun categoryDataInitialized() {
         viewModelScope.launch {
 
-            val testList = arrayListOf<CategoryEntity>()
-
-            for (i in 1..10) {
-                testList.add(
+            val categoryList = arrayListOf<CategoryEntity>()
+            MegaCoffee.megaCoffeeCategoryList.forEachIndexed { index, category ->
+                categoryList.add(
                     CategoryEntity(
-                        code = "category_code_$i",
-                        name = "cate#$i"
+                        id = index,
+                        code = category,
+                        name = category,
+                        desc = "${index}: ${category}",
+                        isFilterChecked = false
                     )
                 )
             }
 
-            testList.forEach {
+            categoryList.forEach {
                 categoryRepository.insertCategory(it)
             }
         }

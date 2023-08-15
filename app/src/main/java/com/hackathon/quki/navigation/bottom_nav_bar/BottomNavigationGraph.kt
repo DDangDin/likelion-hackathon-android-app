@@ -54,6 +54,7 @@ fun BottomNavigationGraph(
                 filterList = categoryState.categoryList.filter { it.isFilterChecked },
                 onFilterDelete = { event, item ->
                     uiEventForCategory(event, item)
+                    homeViewModel.getQrCards()
                 },
                 qrCodeList = qrCardsState.value.qrCards.reversed(),
                 onEvent = homeViewModel::uiEvent,
