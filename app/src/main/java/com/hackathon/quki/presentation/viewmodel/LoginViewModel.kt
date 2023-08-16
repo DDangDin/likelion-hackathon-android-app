@@ -9,19 +9,19 @@ import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.domain.repository.CategoryRepository
 import com.hackathon.quki.presentation.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _loginState = mutableStateOf(LoginState())
     val loginState: State<LoginState> = _loginState
 
     init {
-        checkLogin()
         viewModelScope.launch {
             if (categoryRepository.getCategories().isEmpty()) {
                 categoryDataInitialized()
@@ -33,11 +33,16 @@ class LoginViewModel @Inject constructor(
         MegaCoffee.getMegaCoffeeKioskCategory()
         MegaCoffee.getMegaCoffeeStore()
     }
-    fun checkLogin() {
+
+    fun checkLogin(status: Boolean) {
         viewModelScope.launch {
             _loginState.value = loginState.value.copy(loading = true)
-//            delay(1500L)
-//            _loginState.value = loginState.value.copy(login = true, loading = false)
+            delay(1000L)
+            if (status) {
+                _loginState.value = loginState.value.copy(login = true, loading = false)
+            } else {
+                _loginState.value = loginState.value.copy(login = false, loading = false)
+            }
         }
     }
 

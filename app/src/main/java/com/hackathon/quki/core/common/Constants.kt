@@ -15,4 +15,6 @@ object Constants {
         10 to "테스트 커피"
     )
 
+    const val LOGIN_TOKEN = "login_token"
+
 }

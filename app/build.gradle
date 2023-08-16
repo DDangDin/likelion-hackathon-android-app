@@ -32,7 +32,7 @@ android {
 
         // Can Use in Manifest
         // Save: Key - Value
-//        manifestPlaceholders = [KAKAO_NATIVE_APP_KEY: kakao_native_app_key]
+        manifestPlaceholders = [KAKAO_NATIVE_APP_KEY: "kakao_native_app_key"]
     }
 
     buildTypes {

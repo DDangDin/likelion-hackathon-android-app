@@ -1,7 +1,6 @@
 package com.hackathon.quki.navigation.main_nav
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,7 +14,9 @@ import com.hackathon.quki.presentation.viewmodel.LoginViewModel
 fun MainNavigationGraph(
     navController: NavHostController,
     onScanQrClick: () -> Unit,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    loginWithKakao: () -> Unit,
+    loginViewModel: LoginViewModel
 ) {
 
     NavHost(
@@ -25,7 +26,6 @@ fun MainNavigationGraph(
 
         composable(route = Screen.Login.route) {
 
-            val loginViewModel: LoginViewModel = hiltViewModel()
             val loginState = loginViewModel.loginState.value
 
             LoginScreen(
@@ -34,7 +34,9 @@ fun MainNavigationGraph(
                     navController.navigate(Screen.Home.route!!) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
-                }
+                },
+                loginWithKakao = loginWithKakao,
+                checkLogin = { loginViewModel.checkLogin(it) }
             )
         }
 

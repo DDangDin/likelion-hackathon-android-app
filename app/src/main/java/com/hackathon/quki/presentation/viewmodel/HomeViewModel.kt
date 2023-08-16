@@ -9,6 +9,8 @@ import com.hackathon.quki.data.source.remote.api_server.StoreId
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 import com.hackathon.quki.data.source.remote.kiosk.Options
 import com.hackathon.quki.domain.repository.CategoryRepository
+import com.hackathon.quki.domain.repository.MainRepository
+import com.hackathon.quki.domain.repository.UserRepository
 import com.hackathon.quki.presentation.state.HomeQrUiEvent
 import com.hackathon.quki.presentation.state.QrCardState
 import com.hackathon.quki.presentation.state.QrCardsState
@@ -23,7 +25,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val userRepository: UserRepository,
+    private val mainRepository: MainRepository
 ) : ViewModel() {
 
     var searchText = mutableStateOf("")
@@ -44,6 +48,7 @@ class HomeViewModel @Inject constructor(
 
     fun onSearchTextChanged(value: String) {
         searchText.value = value
+        getQrCards(value)
     }
 
     fun uiEvent(homeUiEvent: HomeQrUiEvent) {
@@ -81,7 +86,7 @@ class HomeViewModel @Inject constructor(
 //        }
 //    }
 
-    fun getQrCards() {
+    fun getQrCards(query: String = "") {
         viewModelScope.launch {
             Log.d("HomeViewModel_Log", "HomeViewModel-getQrCards Trigger")
             _qrCardsState.update { it.copy(loading = true) }
@@ -143,7 +148,13 @@ class HomeViewModel @Inject constructor(
                 filteredList
             }
 
-            _qrCardsState.update { it.copy(loading = false, qrCards = resultList) }
+            val searchList = if (query.isNotEmpty()) {
+                resultList.filter { query in it.title }
+            } else {
+                resultList
+            }
+
+            _qrCardsState.update { it.copy(loading = false, qrCards = searchList) }
         }
     }
 

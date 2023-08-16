@@ -1,8 +1,6 @@
 package com.hackathon.quki.presentation.components.login
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hackathon.quki.R
+import com.hackathon.quki.core.common.Constants.LOGIN_TOKEN
+import com.hackathon.quki.core.utils.CustomSharedPreference
 import com.hackathon.quki.presentation.state.LoginState
 import com.hackathon.quki.ui.theme.QukiColorBlack
 import com.hackathon.quki.ui.theme.QukiColorGray_3
@@ -33,8 +32,16 @@ import com.hackathon.quki.ui.theme.QukiColorMain
 @Composable
 fun LoginScreen(
     loginState: LoginState,
-    onNavigateMain: () -> Unit
+    onNavigateMain: () -> Unit,
+    loginWithKakao: () -> Unit,
+    checkLogin: (Boolean) -> Unit
 ) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        checkLogin(CustomSharedPreference(context).isContain(LOGIN_TOKEN))
+    }
 
     LaunchedEffect(Unit) {
         if (loginState.login) onNavigateMain()
@@ -101,12 +108,12 @@ fun LoginScreen(
                     } else {
                         CustomLoginButton(
                             text = R.string.login_btn_title_kakao,
-                            icon = R.drawable.ic_launcher_foreground,
-                            onClick = {}
+                            icon = R.drawable.ic_kakao_logo,
+                            onClick = loginWithKakao
                         )
                         CustomLoginButton(
                             text = R.string.login_btn_title_google,
-                            icon = R.drawable.ic_launcher_foreground,
+                            icon = R.drawable.ic_google_logo,
                             onClick = {}
                         )
                     }
@@ -131,6 +138,8 @@ fun LoginScreen(
 fun OnBoardScreenPreview() {
     LoginScreen(
         loginState = LoginState(),
-        onNavigateMain = {}
+        onNavigateMain = {},
+        loginWithKakao = {},
+        checkLogin = {}
     )
 }
