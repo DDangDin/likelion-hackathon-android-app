@@ -35,7 +35,7 @@ import com.hackathon.quki.core.common.Constants.megaCoffeeMenu
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
 import com.hackathon.quki.core.utils.CustomRippleEffect.shimmerEffect
 import com.hackathon.quki.data.source.remote.QrCodeForApp
-import com.hackathon.quki.data.source.remote.StoreId
+import com.hackathon.quki.data.source.remote.api_server.StoreId
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 import com.hackathon.quki.data.source.remote.kiosk.Options
 import com.hackathon.quki.ui.theme.QukiColorGray_2

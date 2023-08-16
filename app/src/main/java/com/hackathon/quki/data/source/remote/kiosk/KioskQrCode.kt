@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.hackathon.quki.core.common.MegaCoffee.getMegaCoffeeCategory
 import com.hackathon.quki.core.common.MegaCoffee.megaCoffeeStoreList
 import com.hackathon.quki.data.source.remote.QrCodeForApp
-import com.hackathon.quki.data.source.remote.StoreId
+import com.hackathon.quki.data.source.remote.api_server.StoreId
 
 // KioskQrCode
 data class KioskQrCode(

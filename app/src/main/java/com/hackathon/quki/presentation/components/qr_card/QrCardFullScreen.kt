@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hackathon.quki.R
 import com.hackathon.quki.data.source.remote.QrCodeForApp
-import com.hackathon.quki.data.source.remote.StoreId
+import com.hackathon.quki.data.source.remote.api_server.StoreId
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 import com.hackathon.quki.data.source.remote.kiosk.Options
 import com.hackathon.quki.presentation.components.common.CommonTopBar

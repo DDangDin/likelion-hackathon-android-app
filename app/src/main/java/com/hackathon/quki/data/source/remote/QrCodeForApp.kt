@@ -1,6 +1,8 @@
 package com.hackathon.quki.data.source.remote
 
 import com.google.gson.annotations.SerializedName
+import com.hackathon.quki.data.source.remote.api_server.QrCardRequest
+import com.hackathon.quki.data.source.remote.api_server.StoreId
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 
 // For App
@@ -18,6 +20,18 @@ data class QrCodeForApp(
     val kioskEntity: KioskQrCode,
 )
 
-//fun QrCodeForApp.toQrCode(): QrCode {
-//
-//}
+fun QrCodeForApp.toQrCardRequest(): QrCardRequest {
+
+    val contentMerge = "${menus}*${options}*${options}"
+
+    return QrCardRequest(
+        content = contentMerge,
+        image = imageUrl,
+        isFavorite = isFavorite,
+        price = price,
+        storeId = storeId,
+        title = title
+    )
+}
+
+

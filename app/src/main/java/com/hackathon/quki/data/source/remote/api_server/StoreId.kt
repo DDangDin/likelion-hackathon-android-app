@@ -1,4 +1,4 @@
-package com.hackathon.quki.data.source.remote
+package com.hackathon.quki.data.source.remote.api_server
 
 import com.google.gson.annotations.SerializedName
 

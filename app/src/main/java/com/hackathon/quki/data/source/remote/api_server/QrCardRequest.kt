@@ -1,9 +1,9 @@
-package com.hackathon.quki.data.source.remote
+package com.hackathon.quki.data.source.remote.api_server
 
 import com.google.gson.annotations.SerializedName
 
-// For Backend
-data class QrCode(
+// For Backend - Request Body
+data class QrCardRequest(
     val content: String,
     val image: String,
     val isFavorite: Boolean,
