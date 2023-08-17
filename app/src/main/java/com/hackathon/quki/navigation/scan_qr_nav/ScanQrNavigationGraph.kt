@@ -59,7 +59,6 @@ fun ScanQrNavigationGraph(
                 onClose = onFinish,
                 wasHomeScreen = false,
                 onHomeQrUiEvent = { onHomeQrUiEvent(it) },
-                isCheckFavorite = true,
                 enabledFavorite = false
             )
         }

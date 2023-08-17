@@ -109,7 +109,8 @@ fun BottomNavigation(
                     getFilteredQrCards = {
                         val userId = CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
                         homeViewModel.getQrCards()
-                    }
+                    },
+                    filterUiEvent = homeViewModel::filterUiEvent
                 )
             }
         },

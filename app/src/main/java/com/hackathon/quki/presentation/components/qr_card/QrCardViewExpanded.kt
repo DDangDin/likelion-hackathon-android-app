@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -59,16 +60,17 @@ fun QrCardViewExpanded(
     likeCount: Int,
     qrCodeForApp: QrCodeForApp,
     onHomeQrUiEvent: (HomeQrUiEvent.CheckFavorite) -> Unit,
-    isCheckFavorite: Boolean,
     enabledFavorite: Boolean
 ) {
+
+    val context = LocalContext.current
 
     var isImageLoading by rememberSaveable {
         mutableStateOf(true)
     }
 
     var isCheckFavoriteCopy by rememberSaveable {
-        mutableStateOf(isCheckFavorite)
+        mutableStateOf(qrCodeForApp.isFavorite)
     }
 
     Box(
@@ -128,22 +130,24 @@ fun QrCardViewExpanded(
                         Image(
                             modifier = Modifier
                                 .size(25.dp)
+                                .padding(start = 5.dp, bottom = 5.dp)
                                 .clickableWithoutRipple(
                                     interactionSource = MutableInteractionSource(),
                                     onClick = {
-                                        onHomeQrUiEvent(
-                                            HomeQrUiEvent.CheckFavorite(
-                                                qrCodeForApp,
-                                                isCheckFavoriteCopy
-                                            )
-                                        )
-                                        isCheckFavoriteCopy = !isCheckFavoriteCopy
+//                                        val userId = CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
+//                                        onHomeQrUiEvent(
+//                                            HomeQrUiEvent.CheckFavorite(
+//                                                userId,
+//                                                qrCodeForApp
+//                                            )
+//                                        )
+//                                        isCheckFavoriteCopy = !isCheckFavoriteCopy
                                     }
                                 ),
                             painter = if (isCheckFavoriteCopy) {
-                                painterResource(id = R.drawable.img_favorite_y)
+                                painterResource(id = R.drawable.img_favorite_y_no_bg)
                             } else {
-                                painterResource(id = R.drawable.img_favorite_n)
+                                painterResource(id = R.drawable.img_favorite_n_no_bg)
                             },
                             contentDescription = "favorite"
                         )
@@ -279,7 +283,6 @@ fun QrCardViewExpandedPreview() {
         ),
         onHomeQrUiEvent = {},
         likeCount = 122,
-        isCheckFavorite = false,
         enabledFavorite = false
     )
 }

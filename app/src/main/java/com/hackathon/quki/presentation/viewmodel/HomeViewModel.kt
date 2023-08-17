@@ -10,6 +10,7 @@ import com.hackathon.quki.data.source.remote.api_server.toQrCodeForApp
 import com.hackathon.quki.domain.repository.CategoryRepository
 import com.hackathon.quki.domain.repository.MainRepository
 import com.hackathon.quki.domain.repository.UserRepository
+import com.hackathon.quki.presentation.state.FilterUiEvent
 import com.hackathon.quki.presentation.state.HomeQrUiEvent
 import com.hackathon.quki.presentation.state.QrCardState
 import com.hackathon.quki.presentation.state.QrCardsState
@@ -48,17 +49,8 @@ class HomeViewModel @Inject constructor(
 
     private var qrListForSearch = listOf<QrCodeForApp>()
 
-    var favoriteListState = arrayListOf<Long>()
-        private set
-
     init {
 
-    }
-
-    fun favoriteAddAndRemove(add: Boolean, id: Long) {
-        if (add) {
-            favoriteListState.add(id)
-        }
     }
 
     fun onSearchTextChanged(value: String) {
@@ -67,6 +59,26 @@ class HomeViewModel @Inject constructor(
         searchJob = viewModelScope.launch {
             Log.d("search_log", value.trim())
             getQrCards(query = value.trim())
+        }
+    }
+
+    fun filterUiEvent(filterUiEvent: FilterUiEvent) {
+        when (filterUiEvent) {
+            FilterUiEvent.DefaultAlign -> {
+                viewModelScope.launch {
+                    getQrCards()
+                }
+            }
+            FilterUiEvent.FavoriteAlign -> {
+                viewModelScope.launch {
+                    _qrCardsState.update { it.copy(loading = true) }
+
+                    val alignList = qrListForSearch.filter { it.isFavorite }
+                    Log.d("alignList", alignList.toString())
+
+                    _qrCardsState.update { it.copy(qrCards = alignList, loading = false) }
+                }
+            }
         }
     }
 
@@ -87,10 +99,13 @@ class HomeViewModel @Inject constructor(
                 viewModelScope.launch {
                     mainRepository.favoriteCheck(
                         cardId = homeUiEvent.qrCode.id,
-                        value = if (homeUiEvent.value) "n" else "y"
+                        value = if (homeUiEvent.qrCode.isFavorite) "n" else "y"
                     ).onEach { result ->
                         when (result) {
-                            is Resource.Success -> {}
+                            is Resource.Success -> {
+                                getQrCardsFromServer(homeUiEvent.userId)
+                            }
+
                             is Resource.Loading -> {}
                             is Resource.Error -> {}
                         }
@@ -118,6 +133,14 @@ class HomeViewModel @Inject constructor(
 //
 //            _qrCardsState.update { it.copy(loading = false, qrCards = filteredList) }
 //        }
+//    }
+
+//    fun checkFavorite(cardId: Long, value: Boolean) {
+//        _qrCardsState.update { it.copy(loading = true) }
+//
+//        val qrList = qrListForSearch.map { it.isFavorite }
+//
+//        _qrCardsState.update { it.copy(qrCards = qrList, loading = false) }
 //    }
 
     // 기본 가져오기

@@ -17,6 +17,7 @@ import com.hackathon.quki.R
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.presentation.components.common.CommonTopBar
 import com.hackathon.quki.presentation.state.CategoryUiEvent
+import com.hackathon.quki.presentation.state.FilterUiEvent
 
 @Composable
 fun FilterScreen(
@@ -24,7 +25,8 @@ fun FilterScreen(
     categoryList: List<CategoryEntity>,
     onClose: () -> Unit,
     categoryUiEvent: (CategoryUiEvent, CategoryEntity) -> Unit,
-    getFilteredQrCards: () -> Unit
+    getFilteredQrCards: () -> Unit,
+    filterUiEvent: (FilterUiEvent) -> Unit
 ) {
 
     LaunchedEffect(key1 = categoryList) {
@@ -57,15 +59,15 @@ fun FilterScreen(
                 title = stringResource(id = R.string.filter_content_align_title),
                 firstSubTitle = stringResource(id = R.string.filter_sub_content_align_text_1),
                 secondSubTitle = stringResource(id = R.string.filter_sub_content_align_text_2),
-                onFirstSubTitleClick = { },
-                onSecondSubTitleClick = { }
+                onFirstSubTitleClick = { filterUiEvent(FilterUiEvent.FavoriteAlign) },
+                onSecondSubTitleClick = { filterUiEvent(FilterUiEvent.DefaultAlign) }
             )
             FilterContent(
                 title = stringResource(id = R.string.filter_content_view_title),
                 firstSubTitle = stringResource(id = R.string.filter_sub_content_view_text_1),
                 secondSubTitle = stringResource(id = R.string.filter_sub_content_view_text_2),
-                onFirstSubTitleClick = { },
-                onSecondSubTitleClick = { }
+                onFirstSubTitleClick = { filterUiEvent(FilterUiEvent.FavoriteAlign) },
+                onSecondSubTitleClick = { filterUiEvent(FilterUiEvent.DefaultAlign) }
             )
             CategoryContent(
                 title = stringResource(id = R.string.filter_content_category_title),
@@ -92,6 +94,7 @@ fun FilterScreenPreview() {
         categoryList = emptyList(),
         onClose = {},
         categoryUiEvent = { event, item -> },
-        getFilteredQrCards = {}
+        getFilteredQrCards = {},
+        filterUiEvent = {}
     )
 }

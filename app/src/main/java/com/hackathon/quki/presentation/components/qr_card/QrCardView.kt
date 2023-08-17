@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,8 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +50,7 @@ fun QrCardView(
     modifier: Modifier = Modifier,
     qrCodeForApp: QrCodeForApp,
     onFavoriteClick: () -> Unit,
-    isCheckFavorite: Boolean
+    isLongClick: Boolean
 ) {
 
     var isLoading by rememberSaveable {
@@ -138,46 +141,65 @@ fun QrCardView(
                         onFavoriteClick()
                     }
                 ),
-            painter = if (isCheckFavorite) {
+            painter = if (qrCodeForApp.isFavorite) {
                 painterResource(id = R.drawable.img_favorite_y)
             } else {
                 painterResource(id = R.drawable.img_favorite_n)
             },
             contentDescription = "favorite_image"
         )
+
+        if (isLongClick) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Gray.copy(0.35f))
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(10.dp)
+                        .size(35.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_trash),
+                    contentDescription = "trash",
+                    tint = Color(0xFFD83838)
+                )
+            }
+        }
     }
 }
 
 @Preview
 @Composable
 fun QrCardViewPreview() {
-    QrCardView(qrCodeForApp = QrCodeForApp(
-        id = 0,
-        title = "내 QR 카드 (메가 커피) 1 ㅁㄴㅇㅁㅇㄴㅁㄴㅁㄴㅇㅁㅁㄴㅇㅁ",
-        storeId = StoreId(
-            storeId = 10,
-            storeName = "메가커피"
-        ),
-        price = 1000,
-        imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
-        isFavorite = false,
-        kioskEntity = KioskQrCode(
-            id = 3,
+    QrCardView(
+        qrCodeForApp = QrCodeForApp(
+            id = 0,
+            title = "내 QR 카드 (메가 커피) 1 ㅁㄴㅇㅁㅇㄴㅁㄴㅁㄴㅇㅁㅁㄴㅇㅁ",
+            storeId = StoreId(
+                storeId = 10,
+                storeName = "메가커피"
+            ),
             price = 1000,
-            count = 1,
-            type = "커피",
-            url = "", // QrImage
-            options = Options("", "", ""),
-            ice = false,
-            cream = false,
-            information = 1
+            imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=qr test adsadsa",
+            isFavorite = false,
+            kioskEntity = KioskQrCode(
+                id = 3,
+                price = 1000,
+                count = 1,
+                type = "커피",
+                url = "", // QrImage
+                options = Options("", "", ""),
+                ice = false,
+                cream = false,
+                information = 1
+            ),
+            options = "옵션1, 옵션2, ...",
+            menus = "",
+            count = 0,
+            category = ""
         ),
-        options = "옵션1, 옵션2, ...",
-        menus = "",
-        count = 0,
-        category = ""
-    ),
         onFavoriteClick = {},
-        isCheckFavorite = false
+        isLongClick = false
     )
 }

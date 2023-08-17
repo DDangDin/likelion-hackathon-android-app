@@ -1,6 +1,5 @@
 package com.hackathon.quki.presentation.components.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -30,10 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hackathon.quki.R
+import com.hackathon.quki.core.common.Constants.LOGIN_TOKEN
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
+import com.hackathon.quki.core.utils.CustomSharedPreference
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.data.source.remote.QrCodeForApp
-import com.hackathon.quki.data.source.remote.toSetTitle
 import com.hackathon.quki.presentation.components.home.filter.HomeFilterBar
 import com.hackathon.quki.presentation.components.qr_card.QrCardView
 import com.hackathon.quki.presentation.state.CategoryUiEvent
@@ -52,7 +52,7 @@ fun HomeScreen(
     onFilterDelete: (CategoryUiEvent, CategoryEntity) -> Unit,
     qrCodeList: List<QrCodeForApp>,
     onEvent: (HomeQrUiEvent) -> Unit,
-    onOpenQrCard: (Boolean) -> Unit,
+    onOpenQrCard: () -> Unit,
 ) {
 
     val context = LocalContext.current
@@ -123,11 +123,11 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     contentPadding = PaddingValues(top = 10.dp, bottom = 58.dp)
                 ) {
-                    Log.d("qrCodeList_Log(HomeScreen)", qrCodeList.toString())
+//                    Log.d("qrCodeList_Log(HomeScreen)", qrCodeList.toString())
                     items(qrCodeList.size) { index ->
 
-                        var isCheckFavorite by rememberSaveable {
-                            mutableStateOf(qrCodeList[index].isFavorite)
+                        var isLongClick by rememberSaveable {
+                            mutableStateOf(false)
                         }
 
                         QrCardView(
@@ -144,24 +144,27 @@ fun HomeScreen(
                                     onClick = {
                                         onEvent(
                                             HomeQrUiEvent.OpenQrCard(
-                                                qrCodeList[index].toSetTitle(
-                                                    index
-                                                )
+                                                qrCodeList[index]
                                             )
                                         )
-                                        onOpenQrCard(isCheckFavorite)
+                                        onOpenQrCard()
+                                    },
+                                    onLongClick = {
+                                        isLongClick = !isLongClick
                                     }
                                 ),
 //                                .clickableWithoutRipple(
 //                                    interactionSource = MutableInteractionSource(),
 //                                    onClick = { onQrCardClick(qrCode) }
 //                                ),
-                            qrCodeForApp = qrCodeList[index].toSetTitle(index),
+                            qrCodeForApp = qrCodeList[index],
                             onFavoriteClick = {
-                                onEvent(HomeQrUiEvent.CheckFavorite(qrCodeList[index], isCheckFavorite))
-                                isCheckFavorite = !isCheckFavorite
+                                val userId =
+                                    CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
+                                onEvent(HomeQrUiEvent.CheckFavorite(userId, qrCodeList[index]))
+//                                isCheckFavorite = !isCheckFavorite
                             },
-                            isCheckFavorite = isCheckFavorite
+                            isLongClick = isLongClick
                         )
                     }
                 }

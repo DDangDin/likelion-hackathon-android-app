@@ -37,8 +37,8 @@ fun QrCodeForApp.toQrCardRequest(): QrCardRequest {
     )
 }
 
-fun QrCodeForApp.toSetTitle(index: Int): QrCodeForApp {
-    return this.copy(title = "${title} ${index+1}")
-}
+//fun QrCodeForApp.toSetTitle(index: Int): QrCodeForApp {
+//    return this.copy(title = "${title} ${index+1}")
+//}
 
 

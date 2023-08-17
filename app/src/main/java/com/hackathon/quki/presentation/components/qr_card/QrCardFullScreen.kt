@@ -33,7 +33,6 @@ fun QrCardFullScreen(
     onClose: () -> Unit,
     wasHomeScreen: Boolean = true,
     onHomeQrUiEvent: (HomeQrUiEvent.CheckFavorite) -> Unit,
-    isCheckFavorite: Boolean,
     enabledFavorite: Boolean
 ) {
 
@@ -84,7 +83,6 @@ fun QrCardFullScreen(
                     category = ""
                 ),
                 onHomeQrUiEvent = { onHomeQrUiEvent(it) },
-                isCheckFavorite = isCheckFavorite,
                 enabledFavorite = enabledFavorite
             )
             Log.d("wasHomeScreen", "wasHomeScreen: ${wasHomeScreen}")
@@ -150,7 +148,6 @@ fun QrCardFullScreenPreview() {
         ),
         onClose = {},
         onHomeQrUiEvent = {},
-        isCheckFavorite = false,
         enabledFavorite = false
     )
 }
