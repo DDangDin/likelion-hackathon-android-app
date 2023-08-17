@@ -1,14 +1,10 @@
 package com.hackathon.quki.navigation.bottom_nav_bar
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -17,15 +13,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.hackathon.quki.core.common.Constants
+import com.hackathon.quki.core.common.Constants.PROFILE_NAME
+import com.hackathon.quki.core.common.Constants.PROFILE_THUMBNAIL
 import com.hackathon.quki.core.utils.CustomSharedPreference
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.navigation.Screen
 import com.hackathon.quki.presentation.components.home.HomeScreen
+import com.hackathon.quki.presentation.components.profile.ProfileScreen
 import com.hackathon.quki.presentation.components.qr_card.QrCardFullScreen
 import com.hackathon.quki.presentation.state.CategoryState
 import com.hackathon.quki.presentation.state.CategoryUiEvent
 import com.hackathon.quki.presentation.viewmodel.HomeViewModel
-import com.hackathon.quki.ui.theme.QukiColorBackground
 
 @Composable
 fun BottomNavigationGraph(
@@ -34,7 +32,8 @@ fun BottomNavigationGraph(
     homeViewModel: HomeViewModel,
     categoryState: CategoryState,
     uiEventForCategory: (CategoryUiEvent, CategoryEntity) -> Unit,
-    onOpenFilter: () -> Unit
+    onOpenFilter: () -> Unit,
+    onLogout: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -81,13 +80,16 @@ fun BottomNavigationGraph(
         }
 
         composable(route = Screen.Profile.route!!) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(QukiColorBackground)
-            ) {
-                Text(modifier = Modifier.align(Alignment.Center), text = "profile screen")
-            }
+
+            val image = CustomSharedPreference(context).getUserPrefs(PROFILE_THUMBNAIL)
+            val name = CustomSharedPreference(context).getUserPrefs(PROFILE_NAME)
+
+            ProfileScreen(
+                modifier = Modifier.fillMaxSize(),
+                image = image,
+                name = name,
+                onLogout = onLogout
+            )
         }
 
         composable(

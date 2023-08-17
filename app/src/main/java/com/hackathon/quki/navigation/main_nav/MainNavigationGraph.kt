@@ -16,7 +16,8 @@ fun MainNavigationGraph(
     onScanQrClick: () -> Unit,
     homeViewModel: HomeViewModel,
     loginWithKakao: () -> Unit,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    onLogout: () -> Unit
 ) {
 
     NavHost(
@@ -43,7 +44,8 @@ fun MainNavigationGraph(
         composable(route = Screen.Home.route!!) {
             BottomNavigation(
                 onScanQrClick = onScanQrClick,
-                homeViewModel = homeViewModel
+                homeViewModel = homeViewModel,
+                onLogout = onLogout
             )
         }
     }

@@ -69,7 +69,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun BottomNavigation(
     onScanQrClick: () -> Unit,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    onLogout: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -197,7 +198,8 @@ fun BottomNavigation(
                             bottomSheetScaffoldState.bottomSheetState.collapse()
                         }
                     }
-                }
+                },
+                onLogout = onLogout
             )
         }
     }

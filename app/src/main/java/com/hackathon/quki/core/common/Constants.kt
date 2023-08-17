@@ -17,5 +17,7 @@ object Constants {
 
     const val LOGIN_TOKEN = "login_token"
 
+    const val PROFILE_NAME = "profile_name"
+    const val PROFILE_THUMBNAIL = "profile_thumbnail"
 
 }

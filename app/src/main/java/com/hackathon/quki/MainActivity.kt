@@ -14,6 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.hackathon.quki.core.common.Constants
 import com.hackathon.quki.core.common.Constants.LOGIN_TOKEN
+import com.hackathon.quki.core.common.Constants.PROFILE_NAME
+import com.hackathon.quki.core.common.Constants.PROFILE_THUMBNAIL
 import com.hackathon.quki.core.utils.CustomSharedPreference
 import com.hackathon.quki.navigation.main_nav.MainNavigationGraph
 import com.hackathon.quki.presentation.viewmodel.HomeViewModel
@@ -25,6 +27,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.UUID
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -44,6 +47,9 @@ class MainActivity : ComponentActivity() {
                     val uuid = UUID.randomUUID()
                     Log.d("kakao_login_log", "로그인 성공 ${it.id}")
                     loginViewModel.login(it.id.toString(), it.properties?.get("nickname") ?: uuid.toString())
+                    CustomSharedPreference(this).setUserPrefs(Constants.LOGIN_TOKEN, it.id.toString())
+                    CustomSharedPreference(this).setUserPrefs(Constants.PROFILE_THUMBNAIL, it.properties?.get("profile_image").toString())
+                    CustomSharedPreference(this).setUserPrefs(Constants.PROFILE_NAME, it.properties?.get("nickname").toString())
                 }
             }
         }
@@ -80,11 +86,23 @@ class MainActivity : ComponentActivity() {
                         },
                         homeViewModel = homeViewModel,
                         loginWithKakao = { loginWithKakao() },
-                        loginViewModel = loginViewModel
+                        loginViewModel = loginViewModel,
+                        onLogout = { safeKillApp() }
                     )
                 }
             }
         }
+    }
+
+    fun safeKillApp() {
+
+        CustomSharedPreference(this).deleteUserPrefs(LOGIN_TOKEN)
+        CustomSharedPreference(this).deleteUserPrefs(PROFILE_NAME)
+        CustomSharedPreference(this).deleteUserPrefs(PROFILE_THUMBNAIL)
+
+        moveTaskToBack(true); // 태스크를 백그라운드로 이동
+        finishAndRemoveTask() // 액티비티 종료 + 태스크 리스트에서 지우기
+        exitProcess(0)
     }
 
     override fun onResume() {
@@ -124,6 +142,8 @@ class MainActivity : ComponentActivity() {
                             Log.d("kakao_login_log", "로그인 성공 ${it.id}")
                             loginViewModel.login(it.id.toString(), it.properties?.get("nickname") ?: uuid.toString())
                             CustomSharedPreference(this).setUserPrefs(Constants.LOGIN_TOKEN, it.id.toString())
+                            CustomSharedPreference(this).setUserPrefs(Constants.PROFILE_THUMBNAIL, it.properties?.get("profile_image").toString())
+                            CustomSharedPreference(this).setUserPrefs(Constants.PROFILE_NAME, it.properties?.get("nickname").toString())
                         }
                     }
                 }

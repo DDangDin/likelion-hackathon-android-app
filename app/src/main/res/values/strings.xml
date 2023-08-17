@@ -30,4 +30,6 @@
     <string name="qr_card_full_screen_notice">키오스크에 주문 코드를 찍어주세요</string>
     <string name="qr_card_full_screen_bottom_bar_share">공유</string>
     <string name="qr_card_full_screen_bottom_bar_download">저장</string>
+
+    <string name="profile_title">내 정보</string>
 </resources>

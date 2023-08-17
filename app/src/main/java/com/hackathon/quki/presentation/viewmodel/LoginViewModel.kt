@@ -65,7 +65,7 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         Log.d("login_log", "login() 진입 ${result.data!!.status}")
-                        if (result.data!!.status) {
+                        if (result.data.status) {
                             _loginState.value = loginState.value.copy(
                                 login = true,
                                 loading = false,
