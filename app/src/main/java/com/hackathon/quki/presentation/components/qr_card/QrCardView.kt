@@ -46,7 +46,8 @@ import com.hackathon.quki.ui.theme.QukiColorMain
 fun QrCardView(
     modifier: Modifier = Modifier,
     qrCodeForApp: QrCodeForApp,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: () -> Unit,
+    isCheckFavorite: Boolean
 ) {
 
     var isLoading by rememberSaveable {
@@ -69,7 +70,7 @@ fun QrCardView(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
-                modifier = Modifier,
+                modifier = Modifier.fillMaxWidth(0.85f),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -124,23 +125,26 @@ fun QrCardView(
                     )
                 }
             }
-            Image(
-                modifier = Modifier
-                    .size(23.dp)
-                    .align(Alignment.Top)
-                    .clip(RoundedCornerShape(50))
-                    .clickableWithoutRipple(
-                        interactionSource = MutableInteractionSource(),
-                        onClick = onFavoriteClick
-                    ),
-                painter = if (qrCodeForApp.isFavorite) {
-                    painterResource(id = R.drawable.img_favorite_y)
-                } else {
-                    painterResource(id = R.drawable.img_favorite_n)
-                },
-                contentDescription = "favorite_image"
-            )
         }
+        Image(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(10.dp)
+                .size(24.dp)
+                .clip(RoundedCornerShape(50))
+                .clickableWithoutRipple(
+                    interactionSource = MutableInteractionSource(),
+                    onClick = {
+                        onFavoriteClick()
+                    }
+                ),
+            painter = if (isCheckFavorite) {
+                painterResource(id = R.drawable.img_favorite_y)
+            } else {
+                painterResource(id = R.drawable.img_favorite_n)
+            },
+            contentDescription = "favorite_image"
+        )
     }
 }
 
@@ -148,7 +152,8 @@ fun QrCardView(
 @Composable
 fun QrCardViewPreview() {
     QrCardView(qrCodeForApp = QrCodeForApp(
-        title = "내 최애 메뉴",
+        id = 0,
+        title = "내 QR 카드 (메가 커피) 1 ㅁㄴㅇㅁㅇㄴㅁㄴㅁㄴㅇㅁㅁㄴㅇㅁ",
         storeId = StoreId(
             storeId = 10,
             storeName = "메가커피"
@@ -172,6 +177,7 @@ fun QrCardViewPreview() {
         count = 0,
         category = ""
     ),
-        onFavoriteClick = {}
+        onFavoriteClick = {},
+        isCheckFavorite = false
     )
 }

@@ -14,6 +14,7 @@ import com.hackathon.quki.core.utils.CustomSharedPreference
 import com.hackathon.quki.navigation.Screen
 import com.hackathon.quki.presentation.components.qr_card.QrCardFullScreen
 import com.hackathon.quki.presentation.components.qr_reader.ScanQrScreen
+import com.hackathon.quki.presentation.state.HomeQrUiEvent
 import com.hackathon.quki.presentation.viewmodel.ScanQrViewModel
 
 @Composable
@@ -21,7 +22,8 @@ fun ScanQrNavigationGraph(
     navController: NavHostController,
     scanQrViewModel: ScanQrViewModel,
     cameraM: CameraManager,
-    onFinish: () -> Unit
+    onFinish: () -> Unit,
+    onHomeQrUiEvent: (HomeQrUiEvent.CheckFavorite) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -55,10 +57,10 @@ fun ScanQrNavigationGraph(
             QrCardFullScreen(
                 qrCardState = qrCardState.value,
                 onClose = onFinish,
-                onFavoriteClick = { },
-                onShare = { },
-                onSave = { },
-                wasHomeScreen = false
+                wasHomeScreen = false,
+                onHomeQrUiEvent = { onHomeQrUiEvent(it) },
+                isCheckFavorite = true,
+                enabledFavorite = false
             )
         }
     }

@@ -47,6 +47,7 @@ import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.api_server.StoreId
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 import com.hackathon.quki.data.source.remote.kiosk.Options
+import com.hackathon.quki.presentation.state.HomeQrUiEvent
 import com.hackathon.quki.ui.theme.QukiColorBlack
 import com.hackathon.quki.ui.theme.QukiColorGray_3
 import com.hackathon.quki.ui.theme.QukiColorMain
@@ -57,11 +58,17 @@ fun QrCardViewExpanded(
     modifier: Modifier = Modifier,
     likeCount: Int,
     qrCodeForApp: QrCodeForApp,
-    onFavoriteClick: () -> Unit
+    onHomeQrUiEvent: (HomeQrUiEvent.CheckFavorite) -> Unit,
+    isCheckFavorite: Boolean,
+    enabledFavorite: Boolean
 ) {
 
     var isImageLoading by rememberSaveable {
         mutableStateOf(true)
+    }
+
+    var isCheckFavoriteCopy by rememberSaveable {
+        mutableStateOf(isCheckFavorite)
     }
 
     Box(
@@ -114,23 +121,33 @@ fun QrCardViewExpanded(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    LikeIcon(
-                        likeCount = likeCount
-                    )
-                    Image(
-                        modifier = Modifier
-                            .size(25.dp)
-                            .clickableWithoutRipple(
-                                interactionSource = MutableInteractionSource(),
-                                onClick = onFavoriteClick
-                            ),
-                        painter = if (qrCodeForApp.isFavorite) {
-                            painterResource(R.drawable.img_favorite_y)
-                        } else {
-                            painterResource(R.drawable.img_favorite_n)
-                        },
-                        contentDescription = "favorite"
-                    )
+//                    LikeIcon(
+//                        likeCount = likeCount
+//                    )
+                    if (enabledFavorite) {
+                        Image(
+                            modifier = Modifier
+                                .size(25.dp)
+                                .clickableWithoutRipple(
+                                    interactionSource = MutableInteractionSource(),
+                                    onClick = {
+                                        onHomeQrUiEvent(
+                                            HomeQrUiEvent.CheckFavorite(
+                                                qrCodeForApp,
+                                                isCheckFavoriteCopy
+                                            )
+                                        )
+                                        isCheckFavoriteCopy = !isCheckFavoriteCopy
+                                    }
+                                ),
+                            painter = if (isCheckFavoriteCopy) {
+                                painterResource(id = R.drawable.img_favorite_y)
+                            } else {
+                                painterResource(id = R.drawable.img_favorite_n)
+                            },
+                            contentDescription = "favorite"
+                        )
+                    }
                 }
             }
             AsyncImage(
@@ -235,6 +252,7 @@ fun QrCardViewExpandedPreview() {
     QrCardViewExpanded(
         modifier = Modifier.fillMaxSize(),
         qrCodeForApp = QrCodeForApp(
+            id = 0,
             title = "내 QR 카드 (메가커피)",
             storeId = StoreId(
                 storeId = 10,
@@ -259,7 +277,9 @@ fun QrCardViewExpandedPreview() {
             count = 0,
             category = ""
         ),
-        onFavoriteClick = {},
-        likeCount = 122
+        onHomeQrUiEvent = {},
+        likeCount = 122,
+        isCheckFavorite = false,
+        enabledFavorite = false
     )
 }

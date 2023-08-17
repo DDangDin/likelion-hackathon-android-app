@@ -73,9 +73,9 @@ fun BottomNavigationGraph(
                 },
                 qrCodeList = qrCardsState.value.qrCards.reversed(),
                 onEvent = homeViewModel::uiEvent,
-                onOpenQrCard = {
+                onOpenQrCard = { isCheckFavorite ->
                     homeViewModel.isQrCardOpen(true)
-                    navController.navigate("${Screen.QrCardFull.route!!}/${true}")
+                    navController.navigate("${Screen.QrCardFull.route!!}/${true}/${isCheckFavorite}")
                 }
             )
         }
@@ -91,11 +91,15 @@ fun BottomNavigationGraph(
         }
 
         composable(
-            route = "${Screen.QrCardFull.route!!}/{wasHomeScreen}",
+            route = "${Screen.QrCardFull.route!!}/{wasHomeScreen}/{isCheckFavorite}",
             arguments = listOf(
                 navArgument("wasHomeScreen") {
                     type = NavType.BoolType
                     defaultValue = true
+                },
+                navArgument("isCheckFavorite") {
+                    type = androidx.navigation.NavType.BoolType
+                    defaultValue = false
                 }
             )
         ) { backStackEntry ->
@@ -103,11 +107,14 @@ fun BottomNavigationGraph(
             val qrCardState = homeViewModel.qrCardState.collectAsState()
 
             val wasHomeScreen = backStackEntry.arguments?.getBoolean("wasHomeScreen") ?: true
+            val isCheckFavorite = backStackEntry.arguments?.getBoolean("isCheckFavorite") ?: false
 
             BackHandler(
                 onBack = {
-                    navController.popBackStack()
+                    val userId = CustomSharedPreference(context).getUserPrefs(Constants.LOGIN_TOKEN)
+                    homeViewModel.getQrCardsFromServer(userId)
                     homeViewModel.isQrCardOpen(false)
+                    navController.popBackStack()
                 }
             )
 
@@ -118,10 +125,10 @@ fun BottomNavigationGraph(
                     homeViewModel.isQrCardOpen(false)
                     navController.popBackStack()
                 },
-                onFavoriteClick = { },
-                onShare = { },
-                onSave = { },
-                wasHomeScreen = wasHomeScreen
+                wasHomeScreen = wasHomeScreen,
+                onHomeQrUiEvent = homeViewModel::uiEvent,
+                isCheckFavorite = isCheckFavorite,
+                enabledFavorite = true
             )
         }
 

@@ -23,6 +23,7 @@ data class KioskQrCode(
 fun KioskQrCode.toQrCodeForApp(rawValue: String): QrCodeForApp {
 
     return QrCodeForApp(
+        id = 0,
         title = "내 QR 카드 (${megaCoffeeStoreList[information] ?: ""})",
         imageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${rawValue}",
         isFavorite = false,

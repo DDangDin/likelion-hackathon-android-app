@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.hackathon.quki.navigation.scan_qr_nav.ScanQrNavigationGraph
+import com.hackathon.quki.presentation.viewmodel.HomeViewModel
 import com.hackathon.quki.presentation.viewmodel.ScanQrViewModel
 import com.hackathon.quki.ui.theme.QukiTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +44,7 @@ class ScanQrActivity : ComponentActivity() {
                     ) {
 
                         val scanQrViewModel: ScanQrViewModel = hiltViewModel()
+                        val homeViewModel: HomeViewModel = hiltViewModel()
                         val navController = rememberNavController()
 
 //                        Text(
@@ -54,7 +56,8 @@ class ScanQrActivity : ComponentActivity() {
                             navController = navController,
                             scanQrViewModel = scanQrViewModel,
                             cameraM = cameraM,
-                            onFinish = { finish() }
+                            onFinish = { finish() },
+                            onHomeQrUiEvent = homeViewModel::uiEvent
                         )
                     }
                 }

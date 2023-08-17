@@ -48,8 +48,17 @@ class HomeViewModel @Inject constructor(
 
     private var qrListForSearch = listOf<QrCodeForApp>()
 
+    var favoriteListState = arrayListOf<Long>()
+        private set
+
     init {
 
+    }
+
+    fun favoriteAddAndRemove(add: Boolean, id: Long) {
+        if (add) {
+            favoriteListState.add(id)
+        }
     }
 
     fun onSearchTextChanged(value: String) {
@@ -71,6 +80,21 @@ class HomeViewModel @Inject constructor(
                         qrCard = homeUiEvent.qrCode,
                         status = true
                     )
+                }
+            }
+
+            is HomeQrUiEvent.CheckFavorite -> {
+                viewModelScope.launch {
+                    mainRepository.favoriteCheck(
+                        cardId = homeUiEvent.qrCode.id,
+                        value = if (homeUiEvent.value) "n" else "y"
+                    ).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {}
+                            is Resource.Loading -> {}
+                            is Resource.Error -> {}
+                        }
+                    }.launchIn(viewModelScope)
                 }
             }
         }

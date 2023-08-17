@@ -8,7 +8,7 @@ import com.hackathon.quki.data.source.remote.kiosk.Options
 
 data class QrCardResponse(
     val content: String,
-    val id: Int,
+    val id: Long,
     val image: String,
     @SerializedName("is_favorite")
     val isFavorite: Boolean,
@@ -27,6 +27,7 @@ fun QrCardResponse.toQrCodeForApp(): QrCodeForApp {
 //    val imageUrlMapping = image.replace("\\\"", "\"")
 
     return QrCodeForApp(
+        id = id,
         title = title,
         options = if (contentSplit.size == 1) contentSplit[0] else contentSplit[1],
         menus = contentSplit[0],

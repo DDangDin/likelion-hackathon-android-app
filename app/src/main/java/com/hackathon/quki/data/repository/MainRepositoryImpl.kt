@@ -81,14 +81,13 @@ class MainRepositoryImpl(
     }
 
     override suspend fun favoriteCheck(
-        userId: String,
         cardId: Long,
         value: String
     ): Flow<Resource<UserResponse>> = flow {
         emit(Resource.Loading())
 
         try {
-            val call = api.favoriteCheck(userId, cardId, value)
+            val call = api.favoriteCheck(cardId, value)
             val response = call.await()
             emit(Resource.Success(response))
         } catch (e: IOException) {

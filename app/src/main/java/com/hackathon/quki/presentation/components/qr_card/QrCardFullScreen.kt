@@ -22,6 +22,7 @@ import com.hackathon.quki.data.source.remote.api_server.StoreId
 import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 import com.hackathon.quki.data.source.remote.kiosk.Options
 import com.hackathon.quki.presentation.components.common.CommonTopBar
+import com.hackathon.quki.presentation.state.HomeQrUiEvent
 import com.hackathon.quki.presentation.state.QrCardState
 import com.hackathon.quki.ui.theme.QukiColorMain
 
@@ -30,10 +31,10 @@ fun QrCardFullScreen(
     modifier: Modifier = Modifier,
     qrCardState: QrCardState,
     onClose: () -> Unit,
-    onFavoriteClick: () -> Unit,
-    onShare: () -> Unit,
-    onSave: () -> Unit,
-    wasHomeScreen: Boolean = true
+    wasHomeScreen: Boolean = true,
+    onHomeQrUiEvent: (HomeQrUiEvent.CheckFavorite) -> Unit,
+    isCheckFavorite: Boolean,
+    enabledFavorite: Boolean
 ) {
 
     val qrCodeForApp = qrCardState.qrCard
@@ -57,6 +58,7 @@ fun QrCardFullScreen(
                     .padding(start = 25.dp, end = 25.dp, bottom = 25.dp),
                 likeCount = 0,
                 qrCodeForApp = qrCodeForApp ?: QrCodeForApp(
+                    id = 0,
                     title = "내 최애 메뉴",
                     storeId = StoreId(
                         storeId = 10,
@@ -81,7 +83,9 @@ fun QrCardFullScreen(
                     count = 0,
                     category = ""
                 ),
-                onFavoriteClick = onFavoriteClick,
+                onHomeQrUiEvent = { onHomeQrUiEvent(it) },
+                isCheckFavorite = isCheckFavorite,
+                enabledFavorite = enabledFavorite
             )
             Log.d("wasHomeScreen", "wasHomeScreen: ${wasHomeScreen}")
             if (!wasHomeScreen) {
@@ -118,6 +122,7 @@ fun QrCardFullScreenPreview() {
         modifier = Modifier.fillMaxSize(),
         qrCardState = QrCardState(
             qrCard = QrCodeForApp(
+                id = 0,
                 title = "내 최애 메뉴",
                 storeId = StoreId(
                     storeId = 10,
@@ -144,8 +149,8 @@ fun QrCardFullScreenPreview() {
             )
         ),
         onClose = {},
-        onFavoriteClick = {},
-        onShare = {},
-        onSave = {}
+        onHomeQrUiEvent = {},
+        isCheckFavorite = false,
+        enabledFavorite = false
     )
 }

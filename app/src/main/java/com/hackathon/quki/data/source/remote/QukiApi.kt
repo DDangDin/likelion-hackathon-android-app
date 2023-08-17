@@ -58,9 +58,8 @@ interface QukiApi {
         @Body qrCardRequest: QrCardRequest
     ): Call<String>
 
-    @PATCH("/qr/favorite/{userId}/{cardId}/{value}")
+    @PATCH("/qr/favorite/{cardId}/{value}")
     fun favoriteCheck(
-        @Path("userId") userId: String,
         @Path("cardId") cardId: Long,
         @Path("value") value: String, // "y" or "n"
     ): Call<UserResponse>

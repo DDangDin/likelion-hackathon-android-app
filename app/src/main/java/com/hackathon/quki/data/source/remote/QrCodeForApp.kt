@@ -7,7 +7,8 @@ import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 
 // For App
 data class QrCodeForApp(
-    var title: String,
+    val id: Long,
+    val title: String,
     val options: String, // 옵션
     val menus: String, // 메뉴
     val category: String, // 카테고리
@@ -37,7 +38,7 @@ fun QrCodeForApp.toQrCardRequest(): QrCardRequest {
 }
 
 fun QrCodeForApp.toSetTitle(index: Int): QrCodeForApp {
-    return this.copy(title = "${title} - ${index+1}")
+    return this.copy(title = "${title} ${index+1}")
 }
 
 

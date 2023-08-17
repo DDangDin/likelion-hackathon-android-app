@@ -16,9 +16,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,8 +52,10 @@ fun HomeScreen(
     onFilterDelete: (CategoryUiEvent, CategoryEntity) -> Unit,
     qrCodeList: List<QrCodeForApp>,
     onEvent: (HomeQrUiEvent) -> Unit,
-    onOpenQrCard: () -> Unit,
+    onOpenQrCard: (Boolean) -> Unit,
 ) {
+
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -119,6 +126,10 @@ fun HomeScreen(
                     Log.d("qrCodeList_Log(HomeScreen)", qrCodeList.toString())
                     items(qrCodeList.size) { index ->
 
+                        var isCheckFavorite by rememberSaveable {
+                            mutableStateOf(qrCodeList[index].isFavorite)
+                        }
+
                         QrCardView(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -131,8 +142,14 @@ fun HomeScreen(
                                 .clickableWithoutRipple(
                                     interactionSource = MutableInteractionSource(),
                                     onClick = {
-                                        onEvent(HomeQrUiEvent.OpenQrCard(qrCodeList[index].toSetTitle(index)))
-                                        onOpenQrCard()
+                                        onEvent(
+                                            HomeQrUiEvent.OpenQrCard(
+                                                qrCodeList[index].toSetTitle(
+                                                    index
+                                                )
+                                            )
+                                        )
+                                        onOpenQrCard(isCheckFavorite)
                                     }
                                 ),
 //                                .clickableWithoutRipple(
@@ -140,7 +157,11 @@ fun HomeScreen(
 //                                    onClick = { onQrCardClick(qrCode) }
 //                                ),
                             qrCodeForApp = qrCodeList[index].toSetTitle(index),
-                            onFavoriteClick = {}
+                            onFavoriteClick = {
+                                onEvent(HomeQrUiEvent.CheckFavorite(qrCodeList[index], isCheckFavorite))
+                                isCheckFavorite = !isCheckFavorite
+                            },
+                            isCheckFavorite = isCheckFavorite
                         )
                     }
                 }

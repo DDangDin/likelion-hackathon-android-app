@@ -17,7 +17,6 @@ interface MainRepository {
     suspend fun updateQrCard(id: String, qrCardRequest: QrCardRequest): Flow<Resource<String>>
 
     suspend fun favoriteCheck(
-        userId: String,
         cardId: Long,
         value: String
     ): Flow<Resource<UserResponse>>
