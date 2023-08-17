@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.hackathon.quki.core.utils.Resource
 import com.hackathon.quki.data.source.remote.QrCodeForApp
 import com.hackathon.quki.data.source.remote.api_server.toQrCodeForApp
+import com.hackathon.quki.data.source.remote.toQrCardRequest
 import com.hackathon.quki.domain.repository.CategoryRepository
 import com.hackathon.quki.domain.repository.MainRepository
 import com.hackathon.quki.domain.repository.UserRepository
@@ -49,8 +50,15 @@ class HomeViewModel @Inject constructor(
 
     private var qrListForSearch = listOf<QrCodeForApp>()
 
+    var qrCardTitle = mutableStateOf("")
+        private set
+
     init {
 
+    }
+
+    fun onQrCardTitleChanged(value: String) {
+        qrCardTitle.value = value
     }
 
     fun onSearchTextChanged(value: String) {
@@ -112,6 +120,20 @@ class HomeViewModel @Inject constructor(
                     }.launchIn(viewModelScope)
                 }
             }
+
+            is HomeQrUiEvent.DeleteQrCard -> {
+                viewModelScope.launch {
+                    mainRepository.deleteQrCard(homeUiEvent.cardId).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                getQrCardsFromServer(homeUiEvent.userId)
+                            }
+                            is Resource.Loading -> {  }
+                            is Resource.Error -> {  }
+                        }
+                    }.launchIn(viewModelScope)
+                }
+            }
         }
     }
 
@@ -142,6 +164,25 @@ class HomeViewModel @Inject constructor(
 //
 //        _qrCardsState.update { it.copy(qrCards = qrList, loading = false) }
 //    }
+
+    fun updateQrCard(qrCard: QrCodeForApp) {
+        viewModelScope.launch {
+
+            val cardId = qrCard.id
+            val qrCardDto = qrCard.toQrCardRequest()
+            val qrCardDtoEdit = qrCardDto.copy(
+                title = qrCardTitle.value
+            )
+
+            mainRepository.updateQrCard(cardId, qrCardDtoEdit).onEach { result ->
+                when (result) {
+                    is Resource.Success -> {  }
+                    is Resource.Loading -> {  }
+                    is Resource.Error -> {  }
+                }
+            }.launchIn(viewModelScope)
+        }
+    }
 
     // 기본 가져오기
     fun getQrCardsFromServer(userId: String) {

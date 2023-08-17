@@ -109,20 +109,28 @@ fun BottomNavigationGraph(
                     val userId = CustomSharedPreference(context).getUserPrefs(Constants.LOGIN_TOKEN)
 //                    homeViewModel.getQrCardsFromServer(userId)
                     homeViewModel.isQrCardOpen(false)
+                    homeViewModel.updateQrCard(qrCardState.value.qrCard!!)
                     navController.popBackStack()
                 }
             )
+
+            LaunchedEffect(key1 = Unit) {
+                homeViewModel.onQrCardTitleChanged(qrCardState.value.qrCard?.title ?: "")
+            }
 
             QrCardFullScreen(
                 modifier = Modifier.fillMaxSize(),
                 qrCardState = qrCardState.value,
                 onClose = {
                     homeViewModel.isQrCardOpen(false)
+                    homeViewModel.updateQrCard(qrCardState.value.qrCard!!)
                     navController.popBackStack()
                 },
                 wasHomeScreen = wasHomeScreen,
                 onHomeQrUiEvent = homeViewModel::uiEvent,
-                enabledFavorite = true
+                enabledFavorite = true,
+                text = homeViewModel.qrCardTitle.value,
+                onTextChanged = homeViewModel::onQrCardTitleChanged
             )
         }
 

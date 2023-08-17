@@ -33,7 +33,9 @@ fun QrCardFullScreen(
     onClose: () -> Unit,
     wasHomeScreen: Boolean = true,
     onHomeQrUiEvent: (HomeQrUiEvent.CheckFavorite) -> Unit,
-    enabledFavorite: Boolean
+    enabledFavorite: Boolean,
+    text: String  = "",
+    onTextChanged: (String) -> Unit = {}
 ) {
 
     val qrCodeForApp = qrCardState.qrCard
@@ -83,7 +85,9 @@ fun QrCardFullScreen(
                     category = ""
                 ),
                 onHomeQrUiEvent = { onHomeQrUiEvent(it) },
-                enabledFavorite = enabledFavorite
+                enabledFavorite = enabledFavorite,
+                text = text,
+                onTextChanged = { onTextChanged(it) }
             )
             Log.d("wasHomeScreen", "wasHomeScreen: ${wasHomeScreen}")
             if (!wasHomeScreen) {

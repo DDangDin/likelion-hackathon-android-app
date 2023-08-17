@@ -57,6 +57,8 @@ fun HomeScreen(
 
     val context = LocalContext.current
 
+    val userId = CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -142,12 +144,16 @@ fun HomeScreen(
                                 .clickableWithoutRipple(
                                     interactionSource = MutableInteractionSource(),
                                     onClick = {
-                                        onEvent(
-                                            HomeQrUiEvent.OpenQrCard(
-                                                qrCodeList[index]
+                                        if (!isLongClick) {
+                                            onEvent(
+                                                HomeQrUiEvent.OpenQrCard(
+                                                    qrCodeList[index]
+                                                )
                                             )
-                                        )
-                                        onOpenQrCard()
+                                            onOpenQrCard()
+                                        } else {
+                                            isLongClick = false
+                                        }
                                     },
                                     onLongClick = {
                                         isLongClick = !isLongClick
@@ -159,12 +165,14 @@ fun HomeScreen(
 //                                ),
                             qrCodeForApp = qrCodeList[index],
                             onFavoriteClick = {
-                                val userId =
-                                    CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
                                 onEvent(HomeQrUiEvent.CheckFavorite(userId, qrCodeList[index]))
 //                                isCheckFavorite = !isCheckFavorite
                             },
-                            isLongClick = isLongClick
+                            isLongClick = isLongClick,
+                            onDelete = {
+                                onEvent(HomeQrUiEvent.DeleteQrCard(userId, qrCodeList[index].id))
+                                isLongClick = !isLongClick
+                            }
                         )
                     }
                 }

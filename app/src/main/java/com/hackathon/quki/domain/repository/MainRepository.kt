@@ -12,9 +12,9 @@ interface MainRepository {
 
     suspend fun saveQrCard(userId: String, qrCardRequest: QrCardRequest): Flow<Resource<Int>>
 
-    suspend fun deleteQrCard(userId: String): Flow<Resource<Unit>>
+    suspend fun deleteQrCard(cardId: Long): Flow<Resource<Unit>>
 
-    suspend fun updateQrCard(id: String, qrCardRequest: QrCardRequest): Flow<Resource<String>>
+    suspend fun updateQrCard(cardId: Long, qrCardRequest: QrCardRequest): Flow<Resource<String>>
 
     suspend fun favoriteCheck(
         cardId: Long,

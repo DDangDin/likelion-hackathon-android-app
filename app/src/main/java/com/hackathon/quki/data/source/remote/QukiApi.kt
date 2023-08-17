@@ -47,14 +47,14 @@ interface QukiApi {
         @Body qrCardRequest: QrCardRequest
     ): Call<Int>
 
-    @DELETE("/qr/delete/{id}")
+    @DELETE("/qr/delete/{cardId}")
     fun deleteQrCard(
-        @Path("id") id: String
+        @Path("cardId") cardId: Long
     ): Call<Unit>
 
-    @PATCH("/qr/update/{id}")
+    @PATCH("/qr/update/{cardId}")
     fun updateQrCard(
-        @Path("id") id: String,
+        @Path("cardId") cardId: Long,
         @Body qrCardRequest: QrCardRequest
     ): Call<String>
 

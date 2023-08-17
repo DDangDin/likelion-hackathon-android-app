@@ -50,7 +50,8 @@ fun QrCardView(
     modifier: Modifier = Modifier,
     qrCodeForApp: QrCodeForApp,
     onFavoriteClick: () -> Unit,
-    isLongClick: Boolean
+    isLongClick: Boolean,
+    onDelete: () -> Unit
 ) {
 
     var isLoading by rememberSaveable {
@@ -153,16 +154,20 @@ fun QrCardView(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Gray.copy(0.35f))
+                    .background(Color.White.copy(0.8f))
             ) {
                 Icon(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(10.dp)
-                        .size(35.dp),
+                        .size(23.dp)
+                        .clickableWithoutRipple(
+                            interactionSource = MutableInteractionSource(),
+                            onClick = onDelete
+                        ),
                     imageVector = ImageVector.vectorResource(R.drawable.ic_trash),
                     contentDescription = "trash",
-                    tint = Color(0xFFD83838)
+                    tint = Color(0xFFA36363)
                 )
             }
         }
@@ -200,6 +205,7 @@ fun QrCardViewPreview() {
             category = ""
         ),
         onFavoriteClick = {},
-        isLongClick = false
+        isLongClick = false,
+        onDelete = {}
     )
 }

@@ -49,11 +49,11 @@ class MainRepositoryImpl(
         }
     }
 
-    override suspend fun deleteQrCard(userId: String): Flow<Resource<Unit>> = flow {
+    override suspend fun deleteQrCard(cardId: Long): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading())
 
         try {
-            val call = api.deleteQrCard(userId)
+            val call = api.deleteQrCard(cardId)
             val response = call.await()
             emit(Resource.Success(response))
         } catch (e: IOException) {
@@ -64,13 +64,13 @@ class MainRepositoryImpl(
     }
 
     override suspend fun updateQrCard(
-        id: String,
+        cardId: Long,
         qrCardRequest: QrCardRequest
     ): Flow<Resource<String>> = flow {
         emit(Resource.Loading())
 
         try {
-            val call = api.updateQrCard(id, qrCardRequest)
+            val call = api.updateQrCard(cardId, qrCardRequest)
             val response = call.await()
             emit(Resource.Success(response))
         } catch (e: IOException) {
