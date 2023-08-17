@@ -36,7 +36,7 @@ fun MainNavigationGraph(
                     }
                 },
                 loginWithKakao = loginWithKakao,
-                checkLogin = { loginViewModel.checkLogin(it) }
+                showLoginButton = { loginViewModel.showLoginButton() }
             )
         }
 

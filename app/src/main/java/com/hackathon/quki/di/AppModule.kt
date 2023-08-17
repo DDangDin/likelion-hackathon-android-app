@@ -20,7 +20,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -70,21 +69,22 @@ object AppModule {
 //            .writeTimeout(15, TimeUnit.SECONDS)
 
         val loggingInterceptor = HttpLoggingInterceptor { message ->
-            when {
-                message.isJsonObject() ->
-                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
-
-                message.isJsonArray() ->
-                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
-
-                else -> {
-                    try {
-                        Log.d("Retrofit_Log", JSONObject(message).toString(4))
-                    } catch (e: Exception) {
-                        Log.d("Retrofit_Log", message)
-                    }
-                }
-            }
+            Log.d("Retrofit_Log", message)
+//            when {
+//                message.isJsonObject() ->
+//                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
+//
+//                message.isJsonArray() ->
+//                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
+//
+//                else -> {
+//                    try {
+//                        Log.d("Retrofit_Log", JSONObject(message).toString(4))
+//                    } catch (e: Exception) {
+//                        Log.d("Retrofit_Log", message)
+//                    }
+//                }
+//            }
         }
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         client.addInterceptor(loggingInterceptor)

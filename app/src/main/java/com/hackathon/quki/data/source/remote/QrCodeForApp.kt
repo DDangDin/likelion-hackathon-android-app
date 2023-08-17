@@ -7,7 +7,7 @@ import com.hackathon.quki.data.source.remote.kiosk.KioskQrCode
 
 // For App
 data class QrCodeForApp(
-    val title: String,
+    var title: String,
     val options: String, // 옵션
     val menus: String, // 메뉴
     val category: String, // 카테고리
@@ -22,7 +22,9 @@ data class QrCodeForApp(
 
 fun QrCodeForApp.toQrCardRequest(): QrCardRequest {
 
-    val contentMerge = "${menus}*${options}*${options}"
+    /** 구분자: '*' **/
+    val contentMerge = "${menus}*${options}*${category}"
+//    val imageUrlMapping = imageUrl.replace("\"", "\\\"")
 
     return QrCardRequest(
         content = contentMerge,
@@ -32,6 +34,10 @@ fun QrCodeForApp.toQrCardRequest(): QrCardRequest {
         storeId = storeId,
         title = title
     )
+}
+
+fun QrCodeForApp.toSetTitle(index: Int): QrCodeForApp {
+    return this.copy(title = "${title} - ${index+1}")
 }
 
 

@@ -8,16 +8,16 @@ import kotlinx.coroutines.flow.Flow
 
 interface MainRepository {
 
-    suspend fun getQrList(userId: Long): Flow<Resource<List<QrCardResponse>>>
+    suspend fun getQrList(userId: String): Flow<Resource<List<QrCardResponse>>>
 
-    suspend fun saveQrCard(userId: Long, qrCardRequest: QrCardRequest): Flow<Resource<String>>
+    suspend fun saveQrCard(userId: String, qrCardRequest: QrCardRequest): Flow<Resource<Int>>
 
-    suspend fun deleteQrCard(userId: Long): Flow<Resource<Unit>>
+    suspend fun deleteQrCard(userId: String): Flow<Resource<Unit>>
 
-    suspend fun updateQrCard(id: Long, qrCardRequest: QrCardRequest): Flow<Resource<String>>
+    suspend fun updateQrCard(id: String, qrCardRequest: QrCardRequest): Flow<Resource<String>>
 
     suspend fun favoriteCheck(
-        userId: Long,
+        userId: String,
         cardId: Long,
         value: String
     ): Flow<Resource<UserResponse>>

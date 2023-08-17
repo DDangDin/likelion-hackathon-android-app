@@ -1,5 +1,6 @@
 package com.hackathon.quki.presentation.components.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -28,6 +28,7 @@ import com.hackathon.quki.R
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
 import com.hackathon.quki.data.source.local.entity.CategoryEntity
 import com.hackathon.quki.data.source.remote.QrCodeForApp
+import com.hackathon.quki.data.source.remote.toSetTitle
 import com.hackathon.quki.presentation.components.home.filter.HomeFilterBar
 import com.hackathon.quki.presentation.components.qr_card.QrCardView
 import com.hackathon.quki.presentation.state.CategoryUiEvent
@@ -115,7 +116,8 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     contentPadding = PaddingValues(top = 10.dp, bottom = 58.dp)
                 ) {
-                    items(qrCodeList) { qrCode ->
+                    Log.d("qrCodeList_Log(HomeScreen)", qrCodeList.toString())
+                    items(qrCodeList.size) { index ->
 
                         QrCardView(
                             modifier = Modifier
@@ -129,7 +131,7 @@ fun HomeScreen(
                                 .clickableWithoutRipple(
                                     interactionSource = MutableInteractionSource(),
                                     onClick = {
-                                        onEvent(HomeQrUiEvent.OpenQrCard(qrCode))
+                                        onEvent(HomeQrUiEvent.OpenQrCard(qrCodeList[index].toSetTitle(index)))
                                         onOpenQrCard()
                                     }
                                 ),
@@ -137,7 +139,7 @@ fun HomeScreen(
 //                                    interactionSource = MutableInteractionSource(),
 //                                    onClick = { onQrCardClick(qrCode) }
 //                                ),
-                            qrCodeForApp = qrCode,
+                            qrCodeForApp = qrCodeList[index].toSetTitle(index),
                             onFavoriteClick = {}
                         )
                     }

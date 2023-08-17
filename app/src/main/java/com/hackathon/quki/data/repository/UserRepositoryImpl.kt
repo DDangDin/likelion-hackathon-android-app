@@ -14,11 +14,11 @@ class UserRepositoryImpl(
     private val api: QukiApi
 ): UserRepository {
 
-    override suspend fun login(userRequest: UserRequest): Flow<Resource<UserResponse>> = flow {
+    override suspend fun login(id: String): Flow<Resource<UserResponse>> = flow {
         emit(Resource.Loading())
 
         try {
-            val call = api.login(userRequest)
+            val call = api.login(id)
             val response = call.await()
             emit(Resource.Success(response))
         } catch (e: IOException) {

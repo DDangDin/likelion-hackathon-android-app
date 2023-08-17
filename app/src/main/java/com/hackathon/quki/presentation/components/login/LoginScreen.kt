@@ -1,5 +1,6 @@
 package com.hackathon.quki.presentation.components.login
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,17 +35,20 @@ fun LoginScreen(
     loginState: LoginState,
     onNavigateMain: () -> Unit,
     loginWithKakao: () -> Unit,
-    checkLogin: (Boolean) -> Unit
+    showLoginButton: () -> Unit
 ) {
 
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        checkLogin(CustomSharedPreference(context).isContain(LOGIN_TOKEN))
-    }
-
-    LaunchedEffect(Unit) {
-        if (loginState.login) onNavigateMain()
+        Log.d("sp_log", CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN))
+        if (loginState.login) {
+            onNavigateMain()
+        } else if (CustomSharedPreference(context).isContain(LOGIN_TOKEN)) {
+            onNavigateMain()
+        } else {
+            showLoginButton()
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -111,11 +115,11 @@ fun LoginScreen(
                             icon = R.drawable.ic_kakao_logo,
                             onClick = loginWithKakao
                         )
-                        CustomLoginButton(
-                            text = R.string.login_btn_title_google,
-                            icon = R.drawable.ic_google_logo,
-                            onClick = {}
-                        )
+//                        CustomLoginButton(
+//                            text = R.string.login_btn_title_google,
+//                            icon = R.drawable.ic_google_logo,
+//                            onClick = {}
+//                        )
                     }
                 }
             }
@@ -140,6 +144,6 @@ fun OnBoardScreenPreview() {
         loginState = LoginState(),
         onNavigateMain = {},
         loginWithKakao = {},
-        checkLogin = {}
+        showLoginButton = {}
     )
 }

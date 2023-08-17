@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
+import com.hackathon.quki.core.common.Constants
 import com.hackathon.quki.core.common.Constants.LOGIN_TOKEN
 import com.hackathon.quki.core.utils.CustomSharedPreference
 import com.hackathon.quki.navigation.main_nav.MainNavigationGraph
@@ -20,9 +22,9 @@ import com.hackathon.quki.ui.theme.QukiTheme
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -34,9 +36,16 @@ class MainActivity : ComponentActivity() {
     // 이메일 로그인 콜백
     private val mCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            Log.e(TAG+"mCallback", "로그인 실패 $error")
+            Log.e(TAG + "mCallback", "로그인 실패 $error")
         } else if (token != null) {
-            Log.e(TAG+"mCallback", "로그인 성공 ${token.accessToken}")
+            Log.e(TAG + "mCallback", "로그인 성공 ${token.accessToken}")
+            UserApiClient.instance.me { user, error ->
+                user?.let {
+                    val uuid = UUID.randomUUID()
+                    Log.d("kakao_login_log", "로그인 성공 ${it.id}")
+                    loginViewModel.login(it.id.toString(), it.properties?.get("nickname") ?: uuid.toString())
+                }
+            }
         }
     }
 
@@ -44,13 +53,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+//        CustomSharedPreference(this).deleteUserPrefs(LOGIN_TOKEN)
+
         setContent {
 
             val navController = rememberNavController()
+            val context = LocalContext.current
 
             // Kakao Hash
-            Log.d("Kakao_Hash", "keyhash : ${Utility.getKeyHash(this)}")
-
+//            Log.d("Kakao_Hash", "keyhash : ${Utility.getKeyHash(this)}")
 
             QukiTheme {
                 // A surface container using the 'background' color from the theme
@@ -78,7 +89,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        homeViewModel.getQrCards()
+        if (CustomSharedPreference(this).isContain(LOGIN_TOKEN)) {
+            val userId = CustomSharedPreference(this).getUserPrefs(LOGIN_TOKEN)
+            homeViewModel.getQrCardsFromServer(userId)
+        }
     }
 
     fun loginWithKakao() {
@@ -88,7 +102,7 @@ class MainActivity : ComponentActivity() {
             UserApiClient.instance.loginWithKakaoTalk(this@MainActivity) { token, error ->
                 // 로그인 실패 부분
                 if (error != null) {
-                    Log.e(TAG+"카카오톡 로그인 실패", "로그인 실패 $error")
+                    Log.e(TAG + "카카오톡 로그인 실패", "로그인 실패 $error")
                     // 사용자가 취소
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
@@ -103,9 +117,15 @@ class MainActivity : ComponentActivity() {
                 }
                 // 로그인 성공 부분
                 else if (token != null) {
-                    Log.e(TAG+"카카오톡 로그인 성공 부분", "로그인 성공 ${token.accessToken}")
-                    CustomSharedPreference(this).setUserPrefs(LOGIN_TOKEN, token.accessToken)
-                    loginViewModel.checkLogin(true)
+                    Log.d("kakao_login_log", "로그인 성공 ${token.accessToken}")
+                    UserApiClient.instance.me { user, error ->
+                        user?.let {
+                            val uuid = UUID.randomUUID()
+                            Log.d("kakao_login_log", "로그인 성공 ${it.id}")
+                            loginViewModel.login(it.id.toString(), it.properties?.get("nickname") ?: uuid.toString())
+                            CustomSharedPreference(this).setUserPrefs(Constants.LOGIN_TOKEN, it.id.toString())
+                        }
+                    }
                 }
             }
         } else {

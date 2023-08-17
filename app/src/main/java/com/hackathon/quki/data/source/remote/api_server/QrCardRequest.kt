@@ -12,7 +12,3 @@ data class QrCardRequest(
     val storeId: StoreId,
     val title: String
 )
-
-//fun QrCode.toQrCodeFinal(): QrCodeFinal = QrCodeFinal(
-//
-//)

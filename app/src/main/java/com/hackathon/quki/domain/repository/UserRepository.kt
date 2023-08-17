@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    suspend fun login(userRequest: UserRequest): Flow<Resource<UserResponse>>
+    suspend fun login(id: String): Flow<Resource<UserResponse>>
     suspend fun logout(userRequest: UserRequest): Flow<Resource<UserResponse>>
     suspend fun register(userRequest: UserRequest): Flow<Resource<UserResponse>>
     suspend fun delete(userRequest: UserRequest): Flow<Resource<UserResponse>>

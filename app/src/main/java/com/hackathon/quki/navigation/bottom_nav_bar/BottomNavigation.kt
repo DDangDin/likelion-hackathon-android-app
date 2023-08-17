@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,8 +52,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hackathon.quki.core.common.Constants.LOGIN_TOKEN
 import com.hackathon.quki.core.common.Constants.bottomNavItems
 import com.hackathon.quki.core.utils.CustomRippleEffect
+import com.hackathon.quki.core.utils.CustomSharedPreference
 import com.hackathon.quki.navigation.Screen
 import com.hackathon.quki.presentation.components.home.filter_screen.FilterScreen
 import com.hackathon.quki.presentation.viewmodel.CategoryViewModel
@@ -68,6 +71,8 @@ fun BottomNavigation(
     onScanQrClick: () -> Unit,
     homeViewModel: HomeViewModel
 ) {
+
+    val context = LocalContext.current
 
     val scaffoldState = rememberScaffoldState()
     val navController = rememberNavController()
@@ -102,6 +107,7 @@ fun BottomNavigation(
                         categoryViewModel.uiEventForCategory(event, item)
                     },
                     getFilteredQrCards = {
+                        val userId = CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
                         homeViewModel.getQrCards()
                     }
                 )

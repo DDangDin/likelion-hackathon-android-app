@@ -26,12 +26,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.hackathon.quki.R
-import com.hackathon.quki.core.common.Constants.megaCoffeeMenu
 import com.hackathon.quki.core.utils.CustomRippleEffect.clickableWithoutRipple
 import com.hackathon.quki.core.utils.CustomRippleEffect.shimmerEffect
 import com.hackathon.quki.data.source.remote.QrCodeForApp
@@ -94,25 +94,33 @@ fun QrCardView(
                         text = qrCodeForApp.title,
                         fontSize = 14.sp,
                         fontWeight = FontWeight(700),
-                        color = QukiColorGray_3
+                        color = QukiColorGray_3,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = qrCodeForApp.storeId.storeName,
                         fontSize = 10.sp,
                         fontWeight = FontWeight(400),
-                        color = QukiColorMain
+                        color = QukiColorMain,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = megaCoffeeMenu[qrCodeForApp.kioskEntity.id]!!,
+                        text = qrCodeForApp.menus,
                         fontSize = 14.sp,
                         fontWeight = FontWeight(400),
-                        color = QukiColorGray_2
+                        color = QukiColorGray_2,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = qrCodeForApp.options,
                         fontSize = 12.sp,
                         fontWeight = FontWeight(400),
-                        color = QukiColorGray_2
+                        color = QukiColorGray_2,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }

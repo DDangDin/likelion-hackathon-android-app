@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hackathon.quki.core.common.Constants.LOGIN_TOKEN
+import com.hackathon.quki.core.utils.CustomSharedPreference
 import com.hackathon.quki.navigation.Screen
 import com.hackathon.quki.presentation.components.qr_card.QrCardFullScreen
 import com.hackathon.quki.presentation.components.qr_reader.ScanQrScreen
@@ -21,6 +24,8 @@ fun ScanQrNavigationGraph(
     onFinish: () -> Unit
 ) {
 
+    val context = LocalContext.current
+
     NavHost(
         navController = navController,
         startDestination = Screen.QrScanScreen.route!!
@@ -31,7 +36,10 @@ fun ScanQrNavigationGraph(
                 scanQrViewModel = scanQrViewModel,
                 cameraM = cameraM,
                 onClose = onFinish,
-                updateQrCard = { scanQrViewModel.updateQrCardState(it) },
+                updateQrCard = {
+                    val userId = CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
+                    scanQrViewModel.updateQrCardState(userId, it, )
+                },
                 onNavigate = {
                     navController.navigate(Screen.QrCardFull.route!!) {
                         popUpTo(Screen.QrScanScreen.route) { inclusive = true }
@@ -47,9 +55,9 @@ fun ScanQrNavigationGraph(
             QrCardFullScreen(
                 qrCardState = qrCardState.value,
                 onClose = onFinish,
-                onFavoriteClick = {  },
-                onShare = {  },
-                onSave = {  },
+                onFavoriteClick = { },
+                onShare = { },
+                onSave = { },
                 wasHomeScreen = false
             )
         }

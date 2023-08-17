@@ -438,6 +438,7 @@ object MegaCoffee {
 
     /** Category (For Filter) **/
     val megaCoffeeCategoryList = listOf(
+        "",
         "카페",
         "패스트푸드",
         "한식",

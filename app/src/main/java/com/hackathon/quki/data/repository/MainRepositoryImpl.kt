@@ -1,5 +1,6 @@
 package com.hackathon.quki.data.repository
 
+import android.util.Log
 import com.hackathon.quki.core.utils.Resource
 import com.hackathon.quki.data.source.remote.QukiApi
 import com.hackathon.quki.data.source.remote.api_server.QrCardRequest
@@ -15,7 +16,7 @@ class MainRepositoryImpl(
     private val api: QukiApi
 ): MainRepository {
 
-    override suspend fun getQrList(userId: Long): Flow<Resource<List<QrCardResponse>>> = flow {
+    override suspend fun getQrList(userId: String): Flow<Resource<List<QrCardResponse>>> = flow {
         emit(Resource.Loading())
 
         try {
@@ -25,14 +26,15 @@ class MainRepositoryImpl(
         } catch (e: IOException) {
             emit(Resource.Error(e.localizedMessage ?: "Unexpected Error"))
         } catch (e: Exception) {
+            Log.d("qrCodeList_Log(MainRepository_read_qr_list)", "error: ${e.message}")
             emit(Resource.Error(e.localizedMessage ?: "Unexpected Error"))
         }
     }
 
     override suspend fun saveQrCard(
-        userId: Long,
+        userId: String,
         qrCardRequest: QrCardRequest
-    ): Flow<Resource<String>> = flow {
+    ): Flow<Resource<Int>> = flow {
         emit(Resource.Loading())
 
         try {
@@ -42,11 +44,12 @@ class MainRepositoryImpl(
         } catch (e: IOException) {
             emit(Resource.Error(e.localizedMessage ?: "Unexpected Error"))
         } catch (e: Exception) {
+            Log.d("qrCodeList_Log(MainRepository_save_qr)", "error: ${e.localizedMessage}")
             emit(Resource.Error(e.localizedMessage ?: "Unexpected Error"))
         }
     }
 
-    override suspend fun deleteQrCard(userId: Long): Flow<Resource<Unit>> = flow {
+    override suspend fun deleteQrCard(userId: String): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading())
 
         try {
@@ -61,7 +64,7 @@ class MainRepositoryImpl(
     }
 
     override suspend fun updateQrCard(
-        id: Long,
+        id: String,
         qrCardRequest: QrCardRequest
     ): Flow<Resource<String>> = flow {
         emit(Resource.Loading())
@@ -78,7 +81,7 @@ class MainRepositoryImpl(
     }
 
     override suspend fun favoriteCheck(
-        userId: Long,
+        userId: String,
         cardId: Long,
         value: String
     ): Flow<Resource<UserResponse>> = flow {
