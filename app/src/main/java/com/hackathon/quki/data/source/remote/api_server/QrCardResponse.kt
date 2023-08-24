@@ -28,7 +28,7 @@ fun QrCardResponse.toQrCodeForApp(): QrCodeForApp {
 
     return QrCodeForApp(
         id = id,
-        title = "$title $id",
+        title = "$title",
         options = if (contentSplit.size == 1) contentSplit[0] else contentSplit[1],
         menus = contentSplit[0],
         category = if (contentSplit.size == 1) contentSplit[0] else contentSplit[2],

@@ -61,7 +61,7 @@ fun ScanQrView(
 
         Icon(
             modifier = Modifier
-                .size(250.dp)
+                .fillMaxSize(0.9f)
                 .align(Alignment.Center),
             imageVector = ImageVector.vectorResource(R.drawable.ic_qr_scan_big),
             contentDescription = "ic_qr_scan",

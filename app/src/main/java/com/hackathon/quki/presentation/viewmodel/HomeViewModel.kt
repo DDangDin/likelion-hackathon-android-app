@@ -165,7 +165,7 @@ class HomeViewModel @Inject constructor(
 //        _qrCardsState.update { it.copy(qrCards = qrList, loading = false) }
 //    }
 
-    fun updateQrCard(qrCard: QrCodeForApp) {
+    fun updateQrCard(userId: String, qrCard: QrCodeForApp) {
         viewModelScope.launch {
 
             val cardId = qrCard.id
@@ -176,7 +176,9 @@ class HomeViewModel @Inject constructor(
 
             mainRepository.updateQrCard(cardId, qrCardDtoEdit).onEach { result ->
                 when (result) {
-                    is Resource.Success -> {  }
+                    is Resource.Success -> {
+                        getQrCardsFromServer(userId)
+                    }
                     is Resource.Loading -> {  }
                     is Resource.Error -> {  }
                 }

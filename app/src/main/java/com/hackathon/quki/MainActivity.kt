@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.hackathon.quki.core.common.Constants
 import com.hackathon.quki.core.common.Constants.LOGIN_TOKEN
@@ -26,6 +27,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.UUID
 import kotlin.system.exitProcess
 
@@ -94,15 +96,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun safeKillApp() {
+    private fun safeKillApp() {
+        lifecycleScope.launch {
+            CustomSharedPreference(this@MainActivity).deleteUserPrefs(LOGIN_TOKEN)
+            CustomSharedPreference(this@MainActivity).deleteUserPrefs(PROFILE_NAME)
+            CustomSharedPreference(this@MainActivity).deleteUserPrefs(PROFILE_THUMBNAIL)
 
-        CustomSharedPreference(this).deleteUserPrefs(LOGIN_TOKEN)
-        CustomSharedPreference(this).deleteUserPrefs(PROFILE_NAME)
-        CustomSharedPreference(this).deleteUserPrefs(PROFILE_THUMBNAIL)
-
-        moveTaskToBack(true); // 태스크를 백그라운드로 이동
-        finishAndRemoveTask() // 액티비티 종료 + 태스크 리스트에서 지우기
-        exitProcess(0)
+            moveTaskToBack(true); // 태스크를 백그라운드로 이동
+            finishAndRemoveTask() // 액티비티 종료 + 태스크 리스트에서 지우기
+            exitProcess(0)
+        }
     }
 
     override fun onResume() {

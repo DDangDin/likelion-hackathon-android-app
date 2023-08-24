@@ -55,7 +55,8 @@ fun HomeTopBar(
     @DrawableRes optionIcon: Int,
     @DrawableRes optionIcon2: Int,
     searchText: String,
-    onSearchTextChanged: (String) -> Unit
+    onSearchTextChanged: (String) -> Unit,
+    onNavigateProfile: () -> Unit
 ) {
 
     // 나중에 focus 처리 하기
@@ -128,12 +129,12 @@ fun HomeTopBar(
 //                    }
                     IconButton(
                         modifier = Modifier.size(20.dp),
-                        onClick = { }
+                        onClick = onNavigateProfile
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = ImageVector.vectorResource(optionIcon2),
-                            contentDescription = "optionIcon_1",
+                            contentDescription = "optionIcon_2",
                             tint = QukiColorBlack
                         )
                     }
@@ -193,6 +194,7 @@ fun MainTopBarPreview() {
         optionIcon = R.drawable.ic_help,
         optionIcon2 = R.drawable.ic_setting,
         searchText = "",
-        onSearchTextChanged = {}
+        onSearchTextChanged = {},
+        onNavigateProfile = {}
     )
 }

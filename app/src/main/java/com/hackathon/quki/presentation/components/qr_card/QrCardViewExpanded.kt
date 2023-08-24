@@ -189,76 +189,79 @@ fun QrCardViewExpanded(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-//                    Text(
-//                        text = qrCodeForApp.title,
-//                        fontSize = 16.sp,
-//                        fontWeight = FontWeight(700),
-//                        color = QukiColorGray_3,
-//                        maxLines = 1
-//                    )
-                    BasicTextField(
-                        modifier = Modifier.onFocusChanged {
-                            if (enabledFavorite) {
-                                if (it.isFocused) {
-                                    isEditTitle = true
-                                }
-                                if (!it.hasFocus) {
-                                    isEditTitle = false
-                                }
-                            }
-                        },
-                        value = text,
-                        onValueChange = { onTextChanged(it) },
-                        singleLine = true,
-                        maxLines = 1,
-                        cursorBrush = SolidColor(QukiColorBlack),
-                        textStyle = LocalTextStyle.current.copy(
-                            color = QukiColorGray_3,
-                            fontSize = 15.sp,
+                    if (!enabledFavorite) {
+                        Text(
+                            text = qrCodeForApp.title,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight(700),
-                            textAlign = TextAlign.Center
-                        ),
-                        decorationBox = { innerTextField ->
-                            Box(
-                                Modifier
-                                    .padding(7.dp)
-                                    .border(
-                                        color = if (isEditTitle) QukiColorGray_3.copy(0.3f) else Color.Transparent,
-                                        shape = RoundedCornerShape(10.dp),
-                                        width = 0.5.dp
-                                    )
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                        .padding(7.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(
-                                        5.dp,
-                                        alignment = Alignment.CenterHorizontally
-                                    ),
-                                    verticalAlignment = Alignment.CenterVertically
+                            color = QukiColorGray_3,
+                            maxLines = 1
+                        )
+                    } else {
+                        BasicTextField(
+                            modifier = Modifier.onFocusChanged {
+                                if (enabledFavorite) {
+                                    if (it.isFocused) {
+                                        isEditTitle = true
+                                    }
+                                    if (!it.hasFocus) {
+                                        isEditTitle = false
+                                    }
+                                }
+                            },
+                            value = text,
+                            onValueChange = { onTextChanged(it) },
+                            singleLine = true,
+                            maxLines = 1,
+                            cursorBrush = SolidColor(QukiColorBlack),
+                            textStyle = LocalTextStyle.current.copy(
+                                color = QukiColorGray_3,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight(700),
+                                textAlign = TextAlign.Center
+                            ),
+                            decorationBox = { innerTextField ->
+                                Box(
+                                    Modifier
+                                        .padding(7.dp)
+                                        .border(
+                                            color = if (isEditTitle) QukiColorGray_3.copy(0.3f) else Color.Transparent,
+                                            shape = RoundedCornerShape(10.dp),
+                                            width = 0.5.dp
+                                        )
                                 ) {
-                                    innerTextField()
-                                    Icon(
+                                    Row(
                                         modifier = Modifier
-                                            .width(14.dp)
-                                            .height(16.dp)
-                                            .clickableWithoutRipple(
-                                                interactionSource = MutableInteractionSource(),
-                                                onClick = {
-                                                    if (enabledFavorite) {
-                                                        isEditTitle = !isEditTitle
+                                            .align(Alignment.Center)
+                                            .padding(7.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(
+                                            5.dp,
+                                            alignment = Alignment.CenterHorizontally
+                                        ),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        innerTextField()
+                                        Icon(
+                                            modifier = Modifier
+                                                .width(14.dp)
+                                                .height(16.dp)
+                                                .clickableWithoutRipple(
+                                                    interactionSource = MutableInteractionSource(),
+                                                    onClick = {
+                                                        if (enabledFavorite) {
+                                                            isEditTitle = !isEditTitle
+                                                        }
                                                     }
-                                                }
-                                            ),
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_edit),
-                                        contentDescription = "edit",
-                                        tint = Color(0xFFD9D9D9)
-                                    )
+                                                ),
+                                            imageVector = ImageVector.vectorResource(R.drawable.ic_edit),
+                                            contentDescription = "edit",
+                                            tint = Color(0xFFD9D9D9)
+                                        )
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
                 Text(
                     text = qrCodeForApp.storeId.storeName,
@@ -273,27 +276,17 @@ fun QrCardViewExpanded(
                 Log.d("QrCard_Log", qrCodeForApp.options)
             }
 
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp),
-                text = "${qrCodeForApp.price} 원",
-                fontSize = 18.sp,
-                fontWeight = FontWeight(700),
-                color = QukiColorGray_3,
-                textAlign = TextAlign.End
-            )
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 10.dp)
                     .background(Color.LightGray.copy(0.15f), RoundedCornerShape(10.dp)),
             ) {
                 LazyColumn(
-                    modifier = Modifier.padding(horizontal = 5.dp),
+                    modifier = Modifier.padding(10.dp),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(vertical = 8.dp)
+                    contentPadding = PaddingValues(vertical = 6.dp)
                 ) {
                     val menuList = qrCodeForApp.menus.split("-")
                     val optionList = qrCodeForApp.options.split("-")
@@ -303,7 +296,7 @@ fun QrCardViewExpanded(
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             text = menuList[index],
-                            fontSize = 18.sp,
+                            fontSize = 17.sp,
                             fontWeight = FontWeight(700),
                             color = QukiColorGray_3,
                             textAlign = TextAlign.Start
@@ -311,7 +304,7 @@ fun QrCardViewExpanded(
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             text = optionList[index],
-                            fontSize = 16.sp,
+                            fontSize = 15.sp,
                             fontWeight = FontWeight(700),
                             color = QukiColorMain,
                             textAlign = TextAlign.Start
@@ -319,6 +312,16 @@ fun QrCardViewExpanded(
                     }
                 }
             }
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "${qrCodeForApp.price} 원",
+                fontSize = 18.sp,
+                fontWeight = FontWeight(700),
+                color = QukiColorGray_3,
+                textAlign = TextAlign.End
+            )
         }
     }
 }

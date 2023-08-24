@@ -255,14 +255,22 @@ fun MyBottomBar(
 //                            modifier = Modifier.size(25.dp),
                             imageVector = ImageVector.vectorResource(item.icon!!),
                             contentDescription = "item",
-                            tint = QukiColorGray_2
+                            tint = if(currentRoute == item.route) {
+                                QukiColorMain
+                            } else {
+                                QukiColorGray_2
+                            }
                         )
                     },
                     label = {
                         Text(
                             text = item.title!!,
                             fontSize = 10.sp,
-                            color = QukiColorGray_2
+                            color = if(currentRoute == item.route) {
+                                QukiColorMain
+                            } else {
+                                QukiColorGray_2
+                            }
                         )
                     },
                     enabled = true,

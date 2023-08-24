@@ -15,10 +15,10 @@
     <string name="filter_content_align_title">정렬</string>
     <string name="filter_content_view_title">보기</string>
     <string name="filter_content_category_title">카테고리</string>
-    <string name="filter_sub_content_align_text_1">즐겨찾기 우선순</string>
+    <string name="filter_sub_content_align_text_1">즐겨찾기 순</string>
     <string name="filter_sub_content_align_text_2">최신 순</string>
-    <string name="filter_sub_content_view_text_1">즐겨찾기만 보기</string>
-    <string name="filter_sub_content_view_text_2">전체 보기</string>
+    <string name="filter_sub_content_view_text_1">즐겨찾기</string>
+    <string name="filter_sub_content_view_text_2">전체</string>
     <string name="title_activity_scan_qr">ScanQrActivity</string>
 
     <string name="permission_denied_message">카메라 권한을 활성화 해 주세요</string>

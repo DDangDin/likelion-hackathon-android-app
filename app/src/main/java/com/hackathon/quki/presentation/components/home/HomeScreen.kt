@@ -53,6 +53,7 @@ fun HomeScreen(
     qrCodeList: List<QrCodeForApp>,
     onEvent: (HomeQrUiEvent) -> Unit,
     onOpenQrCard: () -> Unit,
+    onNavigateProfile: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -75,7 +76,8 @@ fun HomeScreen(
                 optionIcon = R.drawable.ic_help,
                 optionIcon2 = R.drawable.ic_setting,
                 searchText = searchText,
-                onSearchTextChanged = { onSearchTextChanged(it) }
+                onSearchTextChanged = { onSearchTextChanged(it) },
+                onNavigateProfile = onNavigateProfile
             )
             HomeFilterBar(
                 modifier = Modifier
@@ -193,5 +195,6 @@ fun MainScreenPreview() {
         qrCodeList = emptyList(),
         onEvent = {},
         onOpenQrCard = {},
+        onNavigateProfile = {}
     )
 }

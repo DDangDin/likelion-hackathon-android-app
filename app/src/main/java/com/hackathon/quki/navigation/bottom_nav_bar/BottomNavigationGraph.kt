@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.hackathon.quki.core.common.Constants
+import com.hackathon.quki.core.common.Constants.LOGIN_TOKEN
 import com.hackathon.quki.core.common.Constants.PROFILE_NAME
 import com.hackathon.quki.core.common.Constants.PROFILE_THUMBNAIL
 import com.hackathon.quki.core.utils.CustomSharedPreference
@@ -75,6 +76,9 @@ fun BottomNavigationGraph(
                 onOpenQrCard = {
                     homeViewModel.isQrCardOpen(true)
                     navController.navigate("${Screen.QrCardFull.route!!}/${true}")
+                },
+                onNavigateProfile = {
+                    navigateSaveState(navController, Screen.Profile.route!!)
                 }
             )
         }
@@ -111,7 +115,7 @@ fun BottomNavigationGraph(
                     val userId = CustomSharedPreference(context).getUserPrefs(Constants.LOGIN_TOKEN)
 //                    homeViewModel.getQrCardsFromServer(userId)
                     homeViewModel.isQrCardOpen(false)
-                    homeViewModel.updateQrCard(qrCardState.value.qrCard!!)
+                    homeViewModel.updateQrCard(userId, qrCardState.value.qrCard!!)
                     navController.popBackStack()
                 }
             )
@@ -124,8 +128,9 @@ fun BottomNavigationGraph(
                 modifier = Modifier.fillMaxSize(),
                 qrCardState = qrCardState.value,
                 onClose = {
+                    val userId = CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
                     homeViewModel.isQrCardOpen(false)
-                    homeViewModel.updateQrCard(qrCardState.value.qrCard!!)
+                    homeViewModel.updateQrCard(userId, qrCardState.value.qrCard!!)
                     navController.popBackStack()
                 },
                 wasHomeScreen = wasHomeScreen,
