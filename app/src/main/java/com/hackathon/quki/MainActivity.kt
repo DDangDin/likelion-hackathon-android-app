@@ -97,6 +97,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun safeKillApp() {
+
         lifecycleScope.launch {
             CustomSharedPreference(this@MainActivity).deleteUserPrefs(LOGIN_TOKEN)
             CustomSharedPreference(this@MainActivity).deleteUserPrefs(PROFILE_NAME)
