@@ -25,6 +25,7 @@ import com.hackathon.quki.ui.theme.QukiTheme
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -63,13 +64,13 @@ class MainActivity : ComponentActivity() {
 
 //        CustomSharedPreference(this).deleteUserPrefs(LOGIN_TOKEN)
 
+        // Kakao Hash
+//            Log.d("Kakao_Hash", "keyhash : ${Utility.getKeyHash(this)}")
+
         setContent {
 
             val navController = rememberNavController()
             val context = LocalContext.current
-
-            // Kakao Hash
-//            Log.d("Kakao_Hash", "keyhash : ${Utility.getKeyHash(this)}")
 
             QukiTheme {
                 // A surface container using the 'background' color from the theme

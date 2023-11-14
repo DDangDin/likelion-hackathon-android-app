@@ -1,6 +1,7 @@
 package com.hackathon.quki.presentation.components.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +23,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,10 +64,13 @@ fun HomeScreen(
 
     val userId = CustomSharedPreference(context).getUserPrefs(LOGIN_TOKEN)
 
+    val focusManager = LocalFocusManager.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(QukiColorBackground)
+            .addFocusCleaner(focusManager)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -77,7 +84,8 @@ fun HomeScreen(
                 optionIcon2 = R.drawable.ic_setting,
                 searchText = searchText,
                 onSearchTextChanged = { onSearchTextChanged(it) },
-                onNavigateProfile = onNavigateProfile
+                onNavigateProfile = onNavigateProfile,
+                focusManager = focusManager
             )
             HomeFilterBar(
                 modifier = Modifier
@@ -180,6 +188,15 @@ fun HomeScreen(
                 }
             }
         }
+    }
+}
+
+private fun Modifier.addFocusCleaner(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {
+    return this.pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            doOnClear()
+            focusManager.clearFocus()
+        })
     }
 }
 

@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,17 +27,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,7 +54,7 @@ import com.hackathon.quki.ui.theme.QukiColorGray_3
 import com.hackathon.quki.ui.theme.QukiColorMain
 import com.hackathon.quki.ui.theme.QukiColorShadow
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun HomeTopBar(
     modifier: Modifier = Modifier,
@@ -56,17 +63,15 @@ fun HomeTopBar(
     @DrawableRes optionIcon2: Int,
     searchText: String,
     onSearchTextChanged: (String) -> Unit,
-    onNavigateProfile: () -> Unit
+    onNavigateProfile: () -> Unit,
+    focusManager: FocusManager
 ) {
-
-    // 나중에 focus 처리 하기
-//    val focusRequester = rememberSaveable() {
-//        FocusRequester()
-//    }
 
     var isSearchBarFocused by rememberSaveable {
         mutableStateOf(false)
     }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(
         modifier = modifier
@@ -171,7 +176,14 @@ fun HomeTopBar(
                         contentDescription = "tf_search_icon",
                         tint = QukiColorGray_3
                     )
-                }
+                },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                    }
+                ),
             )
 
 //                    colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -195,6 +207,7 @@ fun MainTopBarPreview() {
         optionIcon2 = R.drawable.ic_setting,
         searchText = "",
         onSearchTextChanged = {},
-        onNavigateProfile = {}
+        onNavigateProfile = {},
+        focusManager = LocalFocusManager.current
     )
 }

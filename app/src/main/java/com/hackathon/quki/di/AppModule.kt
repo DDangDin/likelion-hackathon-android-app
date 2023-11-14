@@ -90,7 +90,7 @@ object AppModule {
         client.addInterceptor(loggingInterceptor)
 
         return Retrofit.Builder()
-            .baseUrl(ApiConstants.QUKI_SERVER_URL)
+            .baseUrl(ApiConstants.QUKI_MOCK_SERVER_URL)
             .client(client.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
